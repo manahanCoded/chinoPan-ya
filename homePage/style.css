@@ -1,0 +1,237 @@
+body, h1, h2, h3, p, div, nav, section, header, footer, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    line-height: 1.6;
+    color: #DEAA79;
+    background-color: #f4f4f9;
+}
+
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #fff;
+    padding: 10px 20px;
+    border-bottom: 2px solid #ddd;
+    font-weight: bold;
+}
+
+.navbar a {
+    margin: 0 10px;
+    text-decoration: none;
+    color: #DEAA79;
+    font-size: 1rem;
+}
+
+.navbar a:hover {
+    color: #000;
+}
+
+.user-icon {
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+
+.hero {
+    position: relative;
+    height: 80vh; 
+    display: flex;
+    align-items: center; 
+    justify-content: center;
+    text-align: center;
+    overflow: hidden; 
+}
+
+.hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; 
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2; 
+    color: white; 
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7); 
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+}
+
+.hero-buttons button {
+    margin: 10px;
+    padding: 10px 20px;
+    background: #DEAA79;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background 0.3s ease;
+}
+
+.hero-buttons button:hover {
+    background: #DEAA79;
+}
+
+
+.services {
+    padding: 40px;
+    background: #f9f9f9;
+    text-align: center;
+}
+
+.services h2 {
+    font-size: 2rem;
+    color: #DEAA79;
+    margin-bottom: 20px;
+}
+
+.services-grid {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.service-card {
+    background: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.service-card img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+.service-card h3 {
+    color: #000;
+    margin: 10px 0;
+}
+
+.service-card p {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.service-card button {
+    margin-top: 10px;
+    padding: 8px 15px;
+    background: #DEAA79;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: background 0.3s ease;
+}
+
+.service-card button:hover {
+    background: #DEAA79;
+}
+
+
+.testimonials {
+    background: #e2dfdf;
+    padding: 40px;
+    text-align: center;
+}
+
+.testimonials h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: black;
+}
+
+.testimonials-slider {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.testimonial-card {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 200px;
+    text-align: center;
+}
+
+.testimonial-card img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.testimonial-card p {
+    font-size: 0.9rem;
+    color: #7f8c8d;
+    margin: 5px 0;
+}
+
+.testimonial-card strong {
+    color: yellow;
+    font-size: 1rem;
+}
+
+.cta {
+    background: #DEAA79;
+    color: white;
+    padding: 40px;
+    text-align: center;
+}
+
+.cta h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.cta button {
+    padding: 10px 20px;
+    margin: 10px;
+    background: white;
+    color: #DEAA79;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 1rem;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.cta button:hover {
+    background: #DEAA79;
+    color: white;
+}

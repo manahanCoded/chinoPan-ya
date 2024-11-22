@@ -1,0 +1,150 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #DEAA79;
+    padding: 15px 0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+header .logo a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.navbar {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.navbar ul li {
+    margin: 0 20px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.navbar ul li a:hover {
+    text-decoration: underline;
+}
+
+/* Filters Section */
+.filters {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filter-options select {
+    padding: 10px;
+    font-size: 14px;
+    margin: 0 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Service Cards Section */
+#service-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.service-card {
+    background-color: #fff;
+    margin: 10px;
+    padding: 20px;
+    width: calc(33.333% - 20px); /* 3 cards per row with some spacing */
+    box-sizing: border-box;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.service-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.service-card h3 {
+    font-size: 18px;
+    color: #333;
+    margin: 15px 0 10px;
+}
+
+.service-card p {
+    font-size: 14px;
+    color: #666;
+}
+
+.service-card .price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #DEAA79;
+}
+
+.service-card .duration {
+    font-size: 12px;
+    color: #aaa;
+}
+
+.service-card button {
+    background-color: #DEAA79;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.service-card button:hover {
+    background-color: #DEAA79;
+}
+
+/* Hover effect for the service cards */
+.service-card:hover {
+    transform: translateY(-10px);
+}
+
+/* Responsive Design: Adjust layout for smaller screens */
+@media (max-width: 768px) {
+    .service-card {
+        width: calc(50% - 20px); /* 2 cards per row on tablets */
+    }
+}
+
+@media (max-width: 480px) {
+    .service-card {
+        width: 100%; /* 1 card per row on mobile */
+    }
+}
