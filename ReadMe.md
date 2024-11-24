@@ -65,3 +65,23 @@ CREATE TABLE Reviews (
     FOREIGN KEY (appointment_id) REFERENCES Appointments(appointment_id),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
+
+CREATE TABLE booking (
+    payment_id INT PRIMARY KEY AUTO_INCREMENT,
+    appointment_id INT NOT NULL,
+    therapist_id INT NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    payment_method ENUM('cash', 'credit_card', 'paypal'),
+    payment_status ENUM('paid', 'unpaid', 'refunded') DEFAULT 'unpaid',
+    transaction_id VARCHAR(100),
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    availability_id INT NOT NULL,
+    date DATE NOT NULL,
+    start_time TIME NOT NULL,
+    end_time TIME NOT NULL,
+    
+    FOREIGN KEY (appointment_id) REFERENCES Appointments(appointment_id) ON DELETE CASCADE,
+    FOREIGN KEY (therapist_id) REFERENCES Users(user_id) ON DELETE CASCADE
+);
+
