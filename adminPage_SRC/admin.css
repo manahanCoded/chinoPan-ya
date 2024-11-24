@@ -1,0 +1,245 @@
+/* General body and font styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styling */
+header {
+    background-color: #DEAA79;
+    padding: 15px 0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+header .logo a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.navbar {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+.user-icon a {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+}
+
+/* Main content styling */
+main {
+    padding: 20px;
+}
+
+/* Section Titles */
+h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Manage Bookings Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th,
+table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+table th {
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Buttons in Table */
+button {
+    background-color: #DEAA79;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+button:hover {
+    background-color: #c88e61;
+}
+
+/* Service Management Section */
+#manage-services {
+    margin-top: 40px;
+}
+
+#manage-services table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+#manage-services table th,
+#manage-services table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#manage-services table th {
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+#manage-services table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Form for adding new service */
+#manage-services form {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#manage-services form input,
+#manage-services form textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+#manage-services form button {
+    width: 100%;
+    padding: 12px;
+    background-color: #DEAA79;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+#manage-services form button:hover {
+    background-color: #c88e61;
+}
+
+/* Therapist Schedule Section */
+#therapist-schedule {
+    margin-top: 40px;
+}
+
+#therapist-schedule p {
+    background-color: #fff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
+}
+
+/* Payments & Reports Section */
+#payments-reports {
+    margin-top: 40px;
+}
+
+#payments-reports table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+#payments-reports table th,
+#payments-reports table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+#payments-reports table th {
+    background-color: #f7f7f7;
+    color: #333;
+}
+
+#payments-reports table tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* Reports Section */
+#payments-reports h3 {
+    margin-top: 40px;
+    font-size: 20px;
+    color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    table th, table td {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    button {
+        font-size: 12px;
+    }
+
+    #manage-services form input,
+    #manage-services form textarea {
+        font-size: 14px;
+    }
+
+    #manage-services form button {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    table th, table td {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    button {
+        font-size: 12px;
+    }
+}

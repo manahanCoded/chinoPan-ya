@@ -1,0 +1,111 @@
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+
+header {
+    background-color: #DEAA79;
+    padding: 15px 0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+header .logo a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 30px;
+}
+
+.navbar {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.navbar {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.navbar  a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+}
+
+.user-icon a{
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+}
+
+#booking-page {
+    padding:  20px;
+    background-color: #f4f4f4;
+    font-family: 'Poppins', sans-serif;
+}
+
+.step {
+    background-color: white;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.step h2 {
+    color: #DEAA79;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.step label {
+    display: block;
+    font-size: 14px;
+    margin-top: 10px;
+    color: #333;
+}
+
+.step select,
+.step input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.confirm-btn {
+    background-color: #DEAA79;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    display: block;
+    width: 100%;
+    text-align: center;
+}
+
+.confirm-btn:hover {
+    background-color: #d5966a;
+}

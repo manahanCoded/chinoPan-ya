@@ -29,28 +29,30 @@ header .logo a {
     justify-content: center;
 }
 
-.navbar ul {
+.navbar {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
+    gap: 15px;
 }
 
-.navbar ul li {
-    margin: 0 20px;
-}
-
-.navbar ul li a {
+.navbar  a {
     color: white;
     text-decoration: none;
     font-size: 18px;
 }
 
-.navbar ul li a:hover {
+.navbar a:hover {
     text-decoration: underline;
 }
 
-/* Filters Section */
+.user-icon a{
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: white;
+}
+
 .filters {
     display: flex;
     justify-content: space-between;
@@ -67,7 +69,6 @@ header .logo a {
     border-radius: 5px;
 }
 
-/* Service Cards Section */
 #service-cards {
     display: flex;
     flex-wrap: wrap;
@@ -80,7 +81,7 @@ header .logo a {
     background-color: #fff;
     margin: 10px;
     padding: 20px;
-    width: calc(33.333% - 20px); /* 3 cards per row with some spacing */
+    width: calc(33.333% - 20px); 
     box-sizing: border-box;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
@@ -131,20 +132,19 @@ header .logo a {
     background-color: #DEAA79;
 }
 
-/* Hover effect for the service cards */
+
 .service-card:hover {
     transform: translateY(-10px);
 }
 
-/* Responsive Design: Adjust layout for smaller screens */
 @media (max-width: 768px) {
     .service-card {
-        width: calc(50% - 20px); /* 2 cards per row on tablets */
+        width: calc(50% - 20px);
     }
 }
 
 @media (max-width: 480px) {
     .service-card {
-        width: 100%; /* 1 card per row on mobile */
+        width: 100%; 
     }
 }

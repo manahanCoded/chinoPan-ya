@@ -1,44 +1,60 @@
-body, h1, h2, h3, p, div, nav, section, header, footer, button {
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
 }
 
-body {
-    line-height: 1.6;
-    color: #DEAA79;
-    background-color: #f4f4f9;
+header {
+    background-color: #DEAA79;
+    padding: 15px 0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
+header .logo a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 30px;
+}
 
 .navbar {
+    flex: 1;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background: #fff;
-    padding: 10px 20px;
-    border-bottom: 2px solid #ddd;
-    font-weight: bold;
+    justify-content: center;
 }
 
-.navbar a {
-    margin: 0 10px;
+.navbar {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 15px;
+}
+
+.navbar  a {
+    color: white;
     text-decoration: none;
-    color: #DEAA79;
-    font-size: 1rem;
+    font-size: 18px;
 }
 
 .navbar a:hover {
-    color: #000;
+    text-decoration: underline;
 }
 
-.user-icon {
+.user-icon a{
     font-size: 1.5rem;
     cursor: pointer;
+    color: white;
 }
 
 
+/* contents */
 .hero {
     position: relative;
     height: 80vh; 
