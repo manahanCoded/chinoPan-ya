@@ -1,67 +1,71 @@
 <?php
 session_start(); 
+include './database/db.php'; // Include database connection
 
-require './database/db.php'; 
-
+// Redirect user to home page if already logged in
 if (isset($_SESSION['user_id'])) {
-    header("Location: profile.php");
+    header("Location: index.php");
     exit();
 }
 
+$error = ""; // Initialize error message
+
+// Check if the form has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
+    // Validate if both email and password are provided
+    if (!empty($_POST['email']) && !empty($_POST['password'])) {
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM Users WHERE username = :username");
-    $stmt->bindParam(':username', $username);
-    $stmt->execute();
+        try {
+            // Prepare SQL statement to find user by email
+            $stmt = $pdo->prepare("SELECT * FROM Users WHERE email = :email");
+            $stmt->bindParam(':email', $email);
+            $stmt->execute();
 
-    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['user_id'];
-        $_SESSION['username'] = $user['username'];
-
-        header("Location: profile.php");
-        exit();
+            // Verify password and redirect if valid
+            if ($user && password_verify($password, $user['password'])) {
+                $_SESSION['user_id'] = $user['user_id'];
+                header("Location: index.php"); // Redirect to home page
+                exit();
+            } else {
+                $error = "Invalid email or password.";
+            }
+        } catch (PDOException $e) {
+            $error = "Database error: " . $e->getMessage();
+        }
     } else {
-        $message = "Invalid username or password!";
+        $error = "Please provide both email and password.";
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Login</title>
     <link rel="stylesheet" href="./userPage_SRC/user.css">
 </head>
-
 <body>
-    <div class="login-design">
-        <div class="login-container">
-            <h2>Login</h2>
-            <?php if (isset($message)): ?>
-                <p class="error-message"><?php echo $message; ?></p>
-            <?php endif; ?>
-            <form action="login.php" method="POST">
-                <label for="username">Username</label>
-                <input type="text" id="username" name="username" required>
+    <h1>Login</h1>
 
-                <label for="password">Password</label>
-                <input type="password" id="password" name="password" required>
+    <?php if ($error): ?>
+        <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+    <?php endif; ?>
 
-                <input type="submit" value="Login">
-            </form>
-            
-            <div class="forgot-password">
-                <a href="#">Forgot password?</a>
-            </div>
-        </div>
-    </div>
+    <form method="POST" action="logIn.php">
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="email" required>
+    
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+    
+    <button type="submit">Login</button>
+</form>
+
 </body>
-
 </html>

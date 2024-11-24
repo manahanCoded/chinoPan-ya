@@ -1,3 +1,11 @@
+<?php
+// Start the session at the top of your file
+session_start();
+
+// Include your database connection
+require './database/db.php'; // Adjust this to your actual connection file
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,15 +21,38 @@
             <a href="#">SpaKol</a>
         </div>
         <nav class="navbar">
-                <a href="./index.php">Home</a>
-                <a href="./service.php">Services</a>
-                <a href="./booking.php">Booking</a>
+            <a href="./index.php">Home</a>
+            <a href="./service.php">Services</a>
+            <a href="./booking.php">Booking</a>
         </nav>
         <div class="user-icon">
-            <a href="./user.php"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <?php
+        // Fetch user email based on session
+        try {
+            $stmt = $pdo->prepare("SELECT email FROM Users WHERE user_id = :user_id");
+            $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $user_email = $user['email'] ?? "User"; // Default to "User" if no email found
+        } catch (PDOException $e) {
+            $user_email = "User"; // Default if database error occurs
+        }
+        ?>
+        <span><?php echo htmlspecialchars($user_email); ?></span>
+        <form action="logout.php" method="post" style="display:inline;">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    <?php else: ?>
+        <a href="register.php">Register</a>
+        <a href="./login.php">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                 <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-            </svg></a>
-        </div>
+            </svg>
+        </a>
+    <?php endif; ?>
+</div>
+
     </header>
 
     <section class="hero" id="home">
@@ -30,14 +61,12 @@
             <h1>Find Your Inner Peace</h1>
             <p>Unwind in Tranquility</p>
             <div class="hero-buttons">
-                <!--Lagay nyo dito yung login page-->
                 <a href="./booking.php"><button>Book Now</button></a>
                 <a href="./service.php"><button>View Services</button></a>
             </div>
         </div>
     </section>
-    
-    
+
     <section class="services" id="services">
         <h2>Our Featured Services</h2>
         <div class="services-grid">
@@ -46,7 +75,6 @@
                 <h3>Full Body Massage</h3>
                 <p>Relieve stress and rejuvenate your body with our signature massage.</p>
                 <p><strong>&#8369;500</strong></p>
-                <!--Lagay nyo dito yung login page-->
                 <a href="./login.php"><button>Book Now</button></a>
             </div>
             <div class="service-card">
@@ -54,7 +82,6 @@
                 <h3>Relaxing Facial</h3>
                 <p>Rejuvenate your skin with our calming facial treatments.</p>
                 <p><strong>&#8369;250</strong></p>
-                <!--Lagay nyo dito yung login page-->
                 <a href="./login.php"><button>Book Now</button></a>
             </div>
             <div class="service-card">
@@ -62,12 +89,10 @@
                 <h3>Hot Stone Therapy</h3>
                 <p>Release tension and balance your energy with warm stone therapy.</p>
                 <p><strong>&#8369;600</strong></p>
-                <!--Lagay nyo dito yung login page-->
                 <a href="./login.php"><button>Book Now</button></a>
             </div>
         </div>
     </section>
-
 
     <section class="testimonials" id="testimonials">
         <h2>What Our Clients Say</h2>
@@ -87,9 +112,8 @@
 
     <footer class="cta">
         <h2>Book Your Appointment Today</h2>
-        <!--Lagay nyo dito yung login page-->
-        <a href="*"><button>Create Account</button></a>
-        <a href="*"><button>Schedule Now</button></a>
+        <a href="register.php"><button>Create Account</button></a>
+        <a href="booking.php"><button>Schedule Now</button></a>
     </footer>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 require './database/db.php';
-require './database/fetch_data.php';
+require './database/fetch_booking.php';
 
 $services = getServices($pdo);
 $specialists = getTherapists($pdo); // Fetch spa specialists

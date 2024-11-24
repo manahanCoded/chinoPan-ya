@@ -1,12 +1,11 @@
 <?php
+require './database/db.php';
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
-
-require './database/db.php';
 $user_id = $_SESSION['user_id'];
 
 $stmt = $pdo->prepare("SELECT * FROM Users WHERE user_id = :user_id");

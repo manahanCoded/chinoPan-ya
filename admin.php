@@ -1,5 +1,6 @@
 <?php
 require './database/db.php';
+include 'db.php';
 
 $queryServices = "SELECT * FROM services";
 $stmtServices = $pdo->query($queryServices);

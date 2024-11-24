@@ -1,5 +1,4 @@
 <?php
-
 require './database/db.php';
 
 
@@ -65,7 +64,7 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <header class="header">
         <div class="logo"><a href="#">SpaKol</a></div>
         <nav class="navbar">
-            <a href="./index.html">Home</a>
+            <a href="index.html">Home</a>
             <a href="./service.html">Services</a>
             <a href="#contacts">Contact</a>
         </nav>
@@ -110,17 +109,36 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </section>
 
     <section id="service-cards" class="service-cards">
-        <?php foreach ($services as $service): ?>
-            <div class="service-card" data-type="<?= htmlspecialchars($service['service_type']); ?>" data-price="<?= $service['price']; ?>" data-duration="<?= $service['duration']; ?>">
-                <img src="<?= htmlspecialchars($service['image_url']); ?>" alt="<?= htmlspecialchars($service['service_name']); ?>">
-                <h3><?= htmlspecialchars($service['service_name']); ?></h3>
-                <p><?= htmlspecialchars($service['description']); ?></p>
-                <p class="price">₱<?= number_format($service['price'], 2); ?></p>
-                <p class="duration">Duration: <?= $service['duration']; ?> mins</p>
-                <a href="./booking.php?service_id=<?= $service['service_id']; ?>"><button>Book Now</button></a>
-            </div>
-        <?php endforeach; ?>
-    </section>
+    <?php 
+    $image_names = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg']; // Assuming image files are in .jpg format
+    $index = 0;
+    foreach ($services as $service): 
+        // Error handling for index to avoid undefined image names
+        if ($index >= count($image_names)) {
+            $index = 0; // Reset to avoid going out of bounds
+        }
+
+        // Ensure that price and duration are set and valid
+        $service_price = isset($service['price']) ? number_format($service['price'], 2) : '0.00';
+        $service_duration = isset($service['duration']) ? htmlspecialchars($service['duration']) : 'N/A';
+        $service_type = isset($service['service_type']) ? htmlspecialchars($service['service_type']) : 'undefined';
+        $service_name = isset($service['service_name']) ? htmlspecialchars($service['service_name']) : 'No Name';
+        $service_description = isset($service['description']) ? htmlspecialchars($service['description']) : 'No Description';
+    ?>
+        <div class="service-card" data-type="<?= $service_type; ?>" data-price="<?= $service_price; ?>" data-duration="<?= $service_duration; ?>">
+            <img src="./servicePage_SRC/<?= htmlspecialchars($image_names[$index]); ?>" alt="<?= $service_name; ?>">
+            <h3><?= $service_name; ?></h3>
+            <p><?= $service_description; ?></p>
+            <p class="price">₱<?= $service_price; ?></p>
+            <p class="duration">Duration: <?= $service_duration; ?> mins</p>
+            <a href="./booking.php?service_id=<?= htmlspecialchars($service['service_id']); ?>"><button>Book Now</button></a>
+        </div>
+    <?php 
+    $index++;
+    endforeach; 
+    ?>
+</section>
+
 
 <script src="./servicePage_SRC/services.js"></script>
 </body>
