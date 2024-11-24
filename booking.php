@@ -6,7 +6,6 @@ $services = getServices($pdo);
 $specialists = getTherapists($pdo); // Fetch spa specialists
 $confirmationMessage = "";
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $service_id = $_POST['service'];
     $specialist_id = $_POST['specialist'];
@@ -16,33 +15,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $promo_code = $_POST['promo_code'] ?? null;
 
     try {
-      
-        $stmt = $pdo->prepare("INSERT INTO Appointments (user_id, therapist_id, service_id, appointment_date, start_time, end_time, status) 
-            VALUES (:user_id, :specialist_id, :service_id, :appointment_date, :start_time, :end_time, 'pending')");
-        $stmt->execute([
-            ':user_id' => 1, 
-            ':specialist_id' => $specialist_id,
-            ':service_id' => $service_id,
-            ':appointment_date' => $appointment_date,
-            ':start_time' => $time_slot,
-            ':end_time' => date("H:i", strtotime("+1 hour", strtotime($time_slot))),
-        ]);
+        // Fetch the price of the selected service
+        $stmt = $pdo->prepare("SELECT price FROM Services WHERE service_id = :service_id");
+        $stmt->execute([':service_id' => $service_id]);
+        $service = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $appointment_id = $pdo->lastInsertId();
+        // Check if service exists
+        if (!$service) {
+            throw new Exception("Selected service not found.");
+        }
 
+        $service_price = $service['price'];
+
+        // Insert the booking into the booking table
+        $stmt = $pdo->prepare("
+            INSERT INTO booking 
+            (appointment_id, therapist_id, amount, payment_method, payment_status, transaction_id, date, start_time, end_time) 
+            VALUES (:appointment_id, :therapist_id, :amount, :payment_method, 'unpaid', :transaction_id, :date, :start_time, :end_time)
+        ");
         $transaction_id = uniqid('txn_');
 
-        $stmt = $pdo->prepare("INSERT INTO Payments (appointment_id, amount, payment_method, payment_status, transaction_id, payment_date) 
-            VALUES (:appointment_id, :amount, :payment_method, 'unpaid', :transaction_id, NOW())");
         $stmt->execute([
-            ':appointment_id' => $appointment_id,
-            ':amount' => 50.00,
+            ':appointment_id' => 1, // Replace with dynamic appointment ID or another way to fetch an appointment ID from Appointments table
+            ':therapist_id' => $specialist_id,
+            ':amount' => $service_price,
             ':payment_method' => $payment_method,
             ':transaction_id' => $transaction_id,
+            ':date' => $appointment_date,
+            ':start_time' => $time_slot,
+            ':end_time' => date("H:i", strtotime("+1 hour", strtotime($time_slot)))
         ]);
 
+        // Confirmation message
         $confirmationMessage = "Appointment Confirmed! Your spa appointment has been booked successfully. Transaction ID: $transaction_id.";
     } catch (PDOException $e) {
+        $confirmationMessage = "Error: " . $e->getMessage();
+    } catch (Exception $e) {
         $confirmationMessage = "Error: " . $e->getMessage();
     }
 }
@@ -63,14 +71,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="#">SpaKol</a>
         </div>
         <nav class="navbar">
-                <a href="./index.php">Home</a>
-                <a href="./service.php">Services</a>
-                <a href="./booking.php">Booking</a>
+            <a href="./index.php">Home</a>
+            <a href="./service.php">Services</a>
+            <a href="./booking.php">Booking</a>
         </nav>
         <div class="user-icon">
-            <a href="./user.php"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-            </svg></a>
+            <a href="./user.php">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+                </svg>
+            </a>
         </div>
     </header>
 
@@ -91,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <select id="service" name="service">
                             <?php foreach ($services as $service): ?>
                                 <option value="<?= $service['service_id']; ?>">
-                                    <?= $service['service_name']; ?> - $<?= $service['price']; ?>
+                                    <?= $service['service_name']; ?> - ₱<?= number_format($service['price'], 2); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>

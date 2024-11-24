@@ -1,18 +1,39 @@
 <?php
 require './database/db.php';
-include 'db.php';
 
-$queryServices = "SELECT * FROM services";
+// Fetch services
+$queryServices = "SELECT * FROM Services";
 $stmtServices = $pdo->query($queryServices);
 $services = $stmtServices->fetchAll(PDO::FETCH_ASSOC);
 
-$queryBookings = "SELECT * FROM bookings";
+// Fetch bookings, join Users and Appointments for customer and therapist names
+$queryBookings = "
+    SELECT 
+        b.payment_id, 
+        a.appointment_id, 
+        b.amount, 
+        b.payment_method, 
+        b.payment_status, 
+        b.payment_date, 
+        b.date, 
+        b.start_time, 
+        b.end_time, 
+        u.full_name AS therapist_name,
+        u2.full_name AS customer_name,
+        s.service_name
+    FROM booking b
+    JOIN Appointments a ON b.appointment_id = a.appointment_id
+    JOIN Users u ON b.therapist_id = u.user_id
+    JOIN Users u2 ON a.user_id = u2.user_id
+    JOIN Services s ON a.service_id = s.service_id
+";
 $stmtBookings = $pdo->query($queryBookings);
 $bookings = $stmtBookings->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Add new service
     if (isset($_POST['add_service'])) {
-        $query = "INSERT INTO services (name, description, price, duration) VALUES (:name, :description, :price, :duration)";
+        $query = "INSERT INTO Services (service_name, description, price, duration) VALUES (:name, :description, :price, :duration)";
         $stmt = $pdo->prepare($query);
         $stmt->execute([
             ':name' => $_POST['name'],
@@ -22,21 +43,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
     }
 
+    // Update booking status (approve or cancel)
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
         $bookingId = $_POST['booking_id'];
         
         if ($action === 'approve') {
-            $query = "UPDATE bookings SET status = 'confirmed' WHERE booking_id = :booking_id";
+            $query = "UPDATE booking SET status = 'confirmed' WHERE payment_id = :booking_id";
         } elseif ($action === 'cancel') {
-            $query = "UPDATE bookings SET status = 'cancelled' WHERE booking_id = :booking_id";
+            $query = "UPDATE booking SET status = 'cancelled' WHERE payment_id = :booking_id";
         }
         $stmt = $pdo->prepare($query);
         $stmt->execute([':booking_id' => $bookingId]);
     }
 }
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,15 +98,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tbody>
                 <?php foreach ($bookings as $booking): ?>
                     <tr>
-                        <td><?= $booking['booking_id'] ?></td>
+                        <td><?= $booking['payment_id'] ?></td>
                         <td><?= $booking['customer_name'] ?></td>
                         <td><?= $booking['service_name'] ?></td>
                         <td><?= $booking['therapist_name'] ?></td>
                         <td><?= $booking['date'] ?></td>
-                        <td><?= $booking['status'] ?></td>
+                        <td><?= $booking['payment_status'] ?></td>
                         <td>
                             <form method="POST">
-                                <input type="hidden" name="booking_id" value="<?= $booking['booking_id'] ?>">
+                                <input type="hidden" name="booking_id" value="<?= $booking['payment_id'] ?>">
                                 <button type="submit" name="action" value="approve">Approve</button>
                                 <button type="submit" name="action" value="cancel">Cancel</button>
                             </form>
@@ -111,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tbody>
                 <?php foreach ($services as $service): ?>
                     <tr>
-                        <td><?= $service['name'] ?></td>
+                        <td><?= $service['service_name'] ?></td>
                         <td><?= $service['description'] ?></td>
                         <td>₱<?= number_format($service['price'], 2) ?></td>
                         <td><?= $service['duration'] ?> mins</td>
@@ -156,16 +178,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tbody>
                 <?php 
                     // Fetch payments from the database
-                    $queryPayments = "SELECT * FROM payments";
+                    $queryPayments = "SELECT * FROM Payments";
                     $stmtPayments = $pdo->query($queryPayments);
                     $payments = $stmtPayments->fetchAll(PDO::FETCH_ASSOC);
                     foreach ($payments as $payment): 
                 ?>
                     <tr>
                         <td><?= $payment['payment_id'] ?></td>
-                        <td><?= $payment['booking_id'] ?></td>
+                        <td><?= $payment['appointment_id'] ?></td>
                         <td>₱<?= number_format($payment['amount'], 2) ?></td>
-                        <td><?= $payment['status'] ?></td>
+                        <td><?= $payment['payment_status'] ?></td>
                         <td><?= $payment['payment_date'] ?></td>
                     </tr>
                 <?php endforeach; ?>
