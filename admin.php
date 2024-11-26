@@ -1,12 +1,10 @@
 <?php
 require './database/db.php';
 
-// Fetch services
 $queryServices = "SELECT * FROM Services";
 $stmtServices = $pdo->query($queryServices);
 $services = $stmtServices->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch bookings, join Users and Appointments for customer and therapist names
 $queryBookings = "
     SELECT 
         b.payment_id, 
@@ -31,7 +29,6 @@ $stmtBookings = $pdo->query($queryBookings);
 $bookings = $stmtBookings->fetchAll(PDO::FETCH_ASSOC);
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Add new service
     if (isset($_POST['add_service'])) {
         $query = "INSERT INTO Services (service_name, description, price, duration) VALUES (:name, :description, :price, :duration)";
         $stmt = $pdo->prepare($query);
@@ -43,7 +40,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
     }
 
-    // Update booking status (approve or cancel)
     if (isset($_POST['action'])) {
         $action = $_POST['action'];
         $bookingId = $_POST['booking_id'];
@@ -80,7 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </header>
 
 <main>
-    <!-- Manage Bookings -->
     <section id="manage-bookings">
         <h2>Manage Bookings</h2>
         <table>
@@ -117,7 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </table>
     </section>
 
-    <!-- Manage Services -->
     <section id="manage-services">
         <h2>Manage Services</h2>
         <table>
@@ -156,13 +150,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
     </section>
 
-    <!-- Therapist Schedule Management -->
     <section id="therapist-schedule">
         <h2>Therapist Schedule</h2>
         <p>Use a calendar here (e.g., FullCalendar) to manage therapist availability.</p>
     </section>
 
-    <!-- Payments & Reports -->
     <section id="payments-reports">
         <h2>Payments & Reports</h2>
         <table>
@@ -177,7 +169,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </thead>
             <tbody>
                 <?php 
-                    // Fetch payments from the database
                     $queryPayments = "SELECT * FROM Payments";
                     $stmtPayments = $pdo->query($queryPayments);
                     $payments = $stmtPayments->fetchAll(PDO::FETCH_ASSOC);

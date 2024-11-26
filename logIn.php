@@ -1,34 +1,29 @@
 <?php
 session_start(); 
-include './database/db.php'; // Include database connection
+include './database/db.php'; 
 
-// Redirect user to home page if already logged in
 if (isset($_SESSION['user_id'])) {
     header("Location: index.php");
     exit();
 }
 
-$error = ""; // Initialize error message
+$error = "";
 
-// Check if the form has been submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Validate if both email and password are provided
     if (!empty($_POST['email']) && !empty($_POST['password'])) {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
         try {
-            // Prepare SQL statement to find user by email
             $stmt = $pdo->prepare("SELECT * FROM Users WHERE email = :email");
             $stmt->bindParam(':email', $email);
             $stmt->execute();
 
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            // Verify password and redirect if valid
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['user_id'];
-                header("Location: index.php"); // Redirect to home page
+                header("Location: index.php");
                 exit();
             } else {
                 $error = "Invalid email or password.";

@@ -1,8 +1,8 @@
 <?php
-require './database/db.php'; // Include database connection
+require './database/db.php'; 
 session_start();
 
-$error = ""; // Initialize error message
+$error = ""; 
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!empty($_POST['full_name']) && !empty($_POST['email']) && !empty($_POST['phone_number']) && !empty($_POST['password'])) {
@@ -32,11 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt->bindParam(':password', $hashedPassword);
 
                 if ($stmt->execute()) {
-                    // Automatically log the user in after registration
+                    
                     $user_id = $pdo->lastInsertId();
                     $_SESSION['user_id'] = $user_id;
 
-                    // Redirect to home page
                     header("Location: index.php");
                     exit();
                 } else {

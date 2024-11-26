@@ -1,4 +1,3 @@
-/* General body and font styling */
 body {
     font-family: 'Poppins', sans-serif;
     background-color: #f4f4f4;
@@ -6,7 +5,6 @@ body {
     padding: 0;
 }
 
-/* Header styling */
 header {
     background-color: #DEAA79;
     padding: 15px 0;
@@ -55,19 +53,17 @@ header .logo a {
     color: white;
 }
 
-/* Main content styling */
+
 main {
     padding: 20px;
 }
 
-/* Section Titles */
 h2 {
     font-size: 24px;
     color: #333;
     margin-bottom: 20px;
 }
 
-/* Manage Bookings Table */
 table {
     width: 100%;
     border-collapse: collapse;
@@ -90,7 +86,6 @@ table tr:hover {
     background-color: #f9f9f9;
 }
 
-/* Buttons in Table */
 button {
     background-color: #DEAA79;
     color: white;
@@ -106,7 +101,6 @@ button:hover {
     background-color: #c88e61;
 }
 
-/* Service Management Section */
 #manage-services {
     margin-top: 40px;
 }
@@ -132,7 +126,6 @@ button:hover {
     background-color: #f9f9f9;
 }
 
-/* Form for adding new service */
 #manage-services form {
     background-color: #fff;
     padding: 20px;
@@ -165,7 +158,6 @@ button:hover {
     background-color: #c88e61;
 }
 
-/* Therapist Schedule Section */
 #therapist-schedule {
     margin-top: 40px;
 }
@@ -179,7 +171,6 @@ button:hover {
     font-size: 16px;
 }
 
-/* Payments & Reports Section */
 #payments-reports {
     margin-top: 40px;
 }
@@ -205,14 +196,12 @@ button:hover {
     background-color: #f9f9f9;
 }
 
-/* Reports Section */
 #payments-reports h3 {
     margin-top: 40px;
     font-size: 20px;
     color: #333;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     table th, table td {
         font-size: 14px;

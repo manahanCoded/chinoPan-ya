@@ -3,7 +3,7 @@ require './database/db.php';
 require './database/fetch_booking.php';
 
 $services = getServices($pdo);
-$specialists = getTherapists($pdo); // Fetch spa specialists
+$specialists = getTherapists($pdo);
 $confirmationMessage = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -15,19 +15,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $promo_code = $_POST['promo_code'] ?? null;
 
     try {
-        // Fetch the price of the selected service
         $stmt = $pdo->prepare("SELECT price FROM Services WHERE service_id = :service_id");
         $stmt->execute([':service_id' => $service_id]);
         $service = $stmt->fetch(PDO::FETCH_ASSOC);
-
-        // Check if service exists
         if (!$service) {
             throw new Exception("Selected service not found.");
         }
 
         $service_price = $service['price'];
 
-        // Insert the booking into the booking table
         $stmt = $pdo->prepare("
             INSERT INTO booking 
             (appointment_id, therapist_id, amount, payment_method, payment_status, transaction_id, date, start_time, end_time) 
@@ -36,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $transaction_id = uniqid('txn_');
 
         $stmt->execute([
-            ':appointment_id' => 1, // Replace with dynamic appointment ID or another way to fetch an appointment ID from Appointments table
+            ':appointment_id' => 1,
             ':therapist_id' => $specialist_id,
             ':amount' => $service_price,
             ':payment_method' => $payment_method,
@@ -46,7 +42,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             ':end_time' => date("H:i", strtotime("+1 hour", strtotime($time_slot)))
         ]);
 
-        // Confirmation message
         $confirmationMessage = "Appointment Confirmed! Your spa appointment has been booked successfully. Transaction ID: $transaction_id.";
     } catch (PDOException $e) {
         $confirmationMessage = "Error: " . $e->getMessage();
@@ -87,14 +82,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <section id="booking-page">
         <div class="container">
             <?php if (!empty($confirmationMessage)): ?>
-                <!-- Confirmation Message -->
                 <div class="confirmation-message">
                     <h1><?= $confirmationMessage ?></h1>
                 </div>
             <?php else: ?>
-                <!-- Booking Form -->
+
                 <form action="" method="POST">
-                    <!-- Step 1 -->
                     <div class="step">
                         <h2>Step 1: Select Service and Specialist</h2>
                         <label for="service">Spa Service:</label>
@@ -115,8 +108,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endforeach; ?>
                         </select>
                     </div>
-
-                    <!-- Step 2 -->
                     <div class="step">
                         <h2>Step 2: Choose Date and Time</h2>
                         <label for="appointment-date">Select Date:</label>
@@ -129,8 +120,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="14:00">02:00 PM</option>
                         </select>
                     </div>
-
-                    <!-- Step 3 -->
                     <div class="step">
                         <h2>Step 3: Confirmation and Payment</h2>
                         <label for="payment-method">Payment Method:</label>

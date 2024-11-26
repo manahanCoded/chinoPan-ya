@@ -110,15 +110,13 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <section id="service-cards" class="service-cards">
     <?php 
-    $image_names = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg']; // Assuming image files are in .jpg format
+    $image_names = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg']; 
     $index = 0;
     foreach ($services as $service): 
-        // Error handling for index to avoid undefined image names
         if ($index >= count($image_names)) {
-            $index = 0; // Reset to avoid going out of bounds
+            $index = 0; 
         }
 
-        // Ensure that price and duration are set and valid
         $service_price = isset($service['price']) ? number_format($service['price'], 2) : '0.00';
         $service_duration = isset($service['duration']) ? htmlspecialchars($service['duration']) : 'N/A';
         $service_type = isset($service['service_type']) ? htmlspecialchars($service['service_type']) : 'undefined';
