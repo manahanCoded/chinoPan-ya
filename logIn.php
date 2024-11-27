@@ -43,24 +43,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="./userPage_SRC/user.css">
+    <link rel="stylesheet" href="./userPage_SRC/sign.css">
 </head>
 <body>
-    <h1>Login</h1>
-
-    <?php if ($error): ?>
-        <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
-    <?php endif; ?>
-
-    <form method="POST" action="logIn.php">
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="email" required>
-    
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
-    
-    <button type="submit">Login</button>
-</form>
-
+    <div class="container">
+        <h1>LOGIN</h1>
+        <h3>Welcome!</h3>
+        <?php if ($error): ?>
+            <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
+        <?php endif; ?>
+        <form method="POST" action="logIn.php">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" autocomplete="email" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+        <p>Don't have an account? <a href="register.php">Register here</a>.</p>
+    </div>
 </body>
 </html>
