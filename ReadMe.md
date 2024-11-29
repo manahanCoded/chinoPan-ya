@@ -95,7 +95,11 @@ INSERT INTO users (full_name, email, phone_number, password, role) VALUES
 ('John Doe', 'john.doe@email.com', '+63 932 234 5678', 'j0hn!234', 'customer'),
 ('Ella Reyes', 'ella.reyes@email.com', '+63 933 876 5432', 'ella#2024', 'therapist'),
 ('Mark Perez', 'mark.perez@email.com', '+63 918 765 4321', 'mark2024!', 'customer'),
-('Lisa Tan', 'lisa.tan@email.com', '+63 917 654 3210', 'l!saTn123', 'therapist');
+('Lisa Tan', 'lisa.tan@email.com', '+63 917 654 3210', 'l!saTn123', 'therapist'),
+('Daniel Cruz', 'daniel.cruz@email.com', '+63 915 123 4567', 'danielC@2024', 'therapist'),
+('Sophia Lim', 'sophia.lim@email.com', '+63 916 987 6543', 'S0ph!aLim', 'therapist'),
+('James Lee', 'james.lee@email.com', '+63 919 876 5432', 'j@m3sL33!', 'therapist');
+
 
 
 <!-- SERVICES -->
