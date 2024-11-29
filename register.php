@@ -61,7 +61,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
-        <h1>Register</h1>
+        <h1 class="headd">Register</h1>
+        <h3>Create an Account!</h3>
         <?php if ($error): ?>
             <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
         <?php endif; ?>    
@@ -81,7 +82,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Register</button>
     </form>
     
-    <p>Already have an account? <a href="logIn.php">Login here</a>.</p>
+    <p>Already have an account?<a href="logIn.php">Login here</a>.</p>
+    <a href="index.php" class="back-home">Go Back</a>
 </div>
 </body>
 </html>
