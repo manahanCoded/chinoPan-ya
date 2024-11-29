@@ -1,17 +1,15 @@
 <?php
-require './database/db.php'; // Include the PDO database connection
-session_start(); // Start the session
+require './database/db.php'; 
+session_start(); 
 
-// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: logIn.php");
     exit();
 }
 
-$user_id = $_SESSION['user_id']; // Retrieve the logged-in user ID
+$user_id = $_SESSION['user_id']; 
 
 try {
-    // Fetch user details from the database
     $stmt = $pdo->prepare("SELECT full_name, email, phone_number FROM Users WHERE user_id = ?");
     $stmt->execute([$user_id]);
     $user = $stmt->fetch();
@@ -20,7 +18,6 @@ try {
         die("User not found.");
     }
 
-    // Fetch bookings (both upcoming and completed) for the user
     $stmtBookings = $pdo->prepare("
         SELECT 
             a.appointment_date, 
@@ -41,10 +38,8 @@ try {
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
-
-// Show confirmation message after booking
 $confirmationMessage = $_SESSION['appointment_confirmation'] ?? '';
-unset($_SESSION['appointment_confirmation']); // Remove message after showing it
+unset($_SESSION['appointment_confirmation']); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -57,9 +52,9 @@ unset($_SESSION['appointment_confirmation']); // Remove message after showing it
 </head>
 
 <body>
-    <header class="navbar">
-        <div class="logo">SpaKol</div>
-        <nav>
+    <header>
+        <div class="logo"><a href="#">SpaKol</a></div>
+        <nav class="navbar">
             <a href="./index.php">Home</a>
             <a href="./service.php">Services</a>
             <a href="./booking.php">Booking</a>
@@ -72,12 +67,21 @@ unset($_SESSION['appointment_confirmation']); // Remove message after showing it
             </a>
         </div>
     </header>
-
+    <div class="container">
+        <div class="after-header">
+            <div class="welcome-section">
+                <h1>Welcome to SpaKol, <?php echo htmlspecialchars($user['full_name']); ?>!</h1>
+                <p>Relax, refresh, and rejuvenate with our premium services. Explore our offerings and manage your bookings below.</p>
+                <button onclick="location.href='./booking.php'" class="explore-button">Explore Services</button>
+            </div>
+        </div>
+    </div>
+        
     <div class="container">
         <div class="center-bod">
             <div class="profile-container">
                 <div class="profile-header">
-                    <img src="profile-picture.jpg" alt="Profile Picture" class="profile-image">
+                    <img src="./homePage_SRC/jaybee.jpg" alt="Profile Picture" class="profile-image">
                     <a href="account.php">
                         <button class="edit-button">Edit</button>
                     </a>
@@ -95,7 +99,6 @@ unset($_SESSION['appointment_confirmation']); // Remove message after showing it
                 <button class="btn book">BOOK NOW</button>
             </div>
             <div class="design-2">
-                <!-- All Bookings -->
                 <div class="appointment-container">
                     <h2>Your Bookings</h2>
                     <?php if (!empty($bookings)): ?>
