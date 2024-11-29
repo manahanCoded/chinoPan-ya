@@ -14,44 +14,57 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $payment_method = $_POST['payment_method'];
     $promo_code = $_POST['promo_code'] ?? null;
 
-    try {
-        // Fetch the price of the selected service
-        $stmt = $pdo->prepare("SELECT price FROM Services WHERE service_id = :service_id");
-        $stmt->execute([':service_id' => $service_id]);
-        $service = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Validate therapist exists and has 'therapist' role
+    $stmt = $pdo->prepare("SELECT COUNT(*) FROM Users WHERE user_id = :user_id AND role = 'therapist'");
+    $stmt->execute([':user_id' => $specialist_id]);
+    $therapistExists = $stmt->fetchColumn();
 
-        // Check if service exists
-        if (!$service) {
-            throw new Exception("Selected service not found.");
+    if (!$therapistExists) {
+        $confirmationMessage = "Error: Selected therapist does not exist or is not a valid therapist.";
+    } else {
+        try {
+            // Fetch the price of the selected service
+            $stmt = $pdo->prepare("SELECT price, duration FROM Services WHERE service_id = :service_id");
+            $stmt->execute([':service_id' => $service_id]);
+            $service = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            // Check if service exists
+            if (!$service) {
+                throw new Exception("Selected service not found.");
+            }
+
+            $service_price = $service['price'];
+            $duration = $service['duration']; // Duration in minutes
+
+            // Calculate end time (assuming service duration in minutes)
+            $end_time = date("H:i", strtotime("+$duration minutes", strtotime($time_slot)));
+
+            // Insert the appointment into the Appointments table
+            $stmt = $pdo->prepare("
+                INSERT INTO Appointments 
+                (user_id, service_id, therapist_id, appointment_date, start_time, end_time, status) 
+                VALUES (:user_id, :service_id, :therapist_id, :appointment_date, :start_time, :end_time, 'pending')
+            ");
+            $stmt->execute([
+                ':user_id' => $_SESSION['user_id'], // Get the user ID from session
+                ':service_id' => $service_id,
+                ':therapist_id' => $specialist_id,
+                ':appointment_date' => $appointment_date,
+                ':start_time' => $time_slot,
+                ':end_time' => $end_time
+            ]);
+
+            // Set the confirmation message in session
+            $_SESSION['appointment_confirmation'] = "Appointment Confirmed! Your spa appointment has been booked successfully.";
+
+            // Redirect to user page
+            header("Location: user.php");
+            exit();
+        } catch (PDOException $e) {
+            $confirmationMessage = "Error: " . $e->getMessage();
+        } catch (Exception $e) {
+            $confirmationMessage = "Error: " . $e->getMessage();
         }
-
-        $service_price = $service['price'];
-
-        // Insert the booking into the booking table
-        $stmt = $pdo->prepare("
-            INSERT INTO booking 
-            (appointment_id, therapist_id, amount, payment_method, payment_status, transaction_id, date, start_time, end_time) 
-            VALUES (:appointment_id, :therapist_id, :amount, :payment_method, 'unpaid', :transaction_id, :date, :start_time, :end_time)
-        ");
-        $transaction_id = uniqid('txn_');
-
-        $stmt->execute([
-            ':appointment_id' => 1, // Replace with dynamic appointment ID or another way to fetch an appointment ID from Appointments table
-            ':therapist_id' => $specialist_id,
-            ':amount' => $service_price,
-            ':payment_method' => $payment_method,
-            ':transaction_id' => $transaction_id,
-            ':date' => $appointment_date,
-            ':start_time' => $time_slot,
-            ':end_time' => date("H:i", strtotime("+1 hour", strtotime($time_slot)))
-        ]);
-
-        // Confirmation message
-        $confirmationMessage = "Appointment Confirmed! Your spa appointment has been booked successfully. Transaction ID: $transaction_id.";
-    } catch (PDOException $e) {
-        $confirmationMessage = "Error: " . $e->getMessage();
-    } catch (Exception $e) {
-        $confirmationMessage = "Error: " . $e->getMessage();
     }
 }
 ?>

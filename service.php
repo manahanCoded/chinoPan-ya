@@ -1,5 +1,7 @@
 <?php
+session_start();
 require './database/db.php';
+
 
 
 $typeFilter = $_GET['service_type'] ?? 'all';
@@ -64,9 +66,9 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <header class="header">
         <div class="logo"><a href="#">SpaKol</a></div>
         <nav class="navbar">
-            <a href="index.html">Home</a>
-            <a href="./service.html">Services</a>
-            <a href="#contacts">Contact</a>
+            <a href="index.php">Home</a>
+            <a href="./service.php">Services</a>
+            <a href="./user.php">User Dashboard</a>
         </nav>
     </header>
 

@@ -75,21 +75,21 @@ require './database/db.php'; // Adjust this to your actual connection file
                 <h3>Full Body Massage</h3>
                 <p>Relieve stress and rejuvenate your body with our signature massage.</p>
                 <p><strong>&#8369;500</strong></p>
-                <a href="./login.php"><button>Book Now</button></a>
+                <a href="./booking.php"><button>Book Now</button></a>
             </div>
             <div class="service-card">
                 <img src="./homePage_SRC/facial.jpg" alt="Relaxing Facial">
                 <h3>Relaxing Facial</h3>
                 <p>Rejuvenate your skin with our calming facial treatments.</p>
                 <p><strong>&#8369;250</strong></p>
-                <a href="./login.php"><button>Book Now</button></a>
+                <a href="./booking.php"><button>Book Now</button></a>
             </div>
             <div class="service-card">
                 <img src="./homePage_SRC/rock.jpg" alt="Hot Stone Therapy">
                 <h3>Hot Stone Therapy</h3>
                 <p>Release tension and balance your energy with warm stone therapy.</p>
                 <p><strong>&#8369;600</strong></p>
-                <a href="./login.php"><button>Book Now</button></a>
+                <a href="./booking.php"><button>Book Now</button></a>
             </div>
         </div>
     </section>

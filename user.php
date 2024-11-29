@@ -1,33 +1,51 @@
 <?php
-require './database/db.php';
-session_start();
+require './database/db.php'; // Include the PDO database connection
+session_start(); // Start the session
 
+// Check if the user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
+    header("Location: logIn.php");
     exit();
 }
-$user_id = $_SESSION['user_id'];
 
-$stmt = $pdo->prepare("SELECT * FROM Users WHERE user_id = :user_id");
-$stmt->bindParam(':user_id', $user_id);
-$stmt->execute();
-$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$user_id = $_SESSION['user_id']; // Retrieve the logged-in user ID
 
-$upcomingStmt = $pdo->prepare("SELECT * FROM Appointments WHERE user_id = :user_id AND status IN ('pending', 'confirmed') ORDER BY appointment_date, start_time");
-$upcomingStmt->bindParam(':user_id', $user_id);
-$upcomingStmt->execute();
-$upcomingAppointments = $upcomingStmt->fetchAll(PDO::FETCH_ASSOC);
+try {
+    // Fetch user details from the database
+    $stmt = $pdo->prepare("SELECT full_name, email, phone_number FROM Users WHERE user_id = ?");
+    $stmt->execute([$user_id]);
+    $user = $stmt->fetch();
 
-$completedStmt = $pdo->prepare("SELECT * FROM Appointments WHERE user_id = :user_id AND status = 'completed' ORDER BY appointment_date DESC");
-$completedStmt->bindParam(':user_id', $user_id);
-$completedStmt->execute();
-$completedAppointments = $completedStmt->fetchAll(PDO::FETCH_ASSOC);
+    if (!$user) {
+        die("User not found.");
+    }
 
-$promoStmt = $pdo->prepare("SELECT * FROM Promotions WHERE CURDATE() BETWEEN start_date AND end_date");
-$promoStmt->execute();
-$promotions = $promoStmt->fetchAll(PDO::FETCH_ASSOC);
+    // Fetch bookings (both upcoming and completed) for the user
+    $stmtBookings = $pdo->prepare("
+        SELECT 
+            a.appointment_date, 
+            a.start_time, 
+            a.end_time, 
+            s.service_name, 
+            u.full_name AS therapist_name, 
+            a.status 
+        FROM Appointments a
+        JOIN Services s ON a.service_id = s.service_id
+        JOIN Users u ON a.therapist_id = u.user_id
+        WHERE a.user_id = ?
+        ORDER BY a.appointment_date ASC, a.start_time ASC
+    ");
+    $stmtBookings->execute([$user_id]);
+    $bookings = $stmtBookings->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+    die("Error: " . $e->getMessage());
+}
+
+// Show confirmation message after booking
+$confirmationMessage = $_SESSION['appointment_confirmation'] ?? '';
+unset($_SESSION['appointment_confirmation']); // Remove message after showing it
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -42,15 +60,16 @@ $promotions = $promoStmt->fetchAll(PDO::FETCH_ASSOC);
     <header class="navbar">
         <div class="logo">SpaKol</div>
         <nav>
-                <a href="./index.php">Home</a>
-                <a href="./service.php">Services</a>
-                <a href="./booking.php">Booking</a>
+            <a href="./index.php">Home</a>
+            <a href="./service.php">Services</a>
+            <a href="./booking.php">Booking</a>
         </nav>
         <div class="user-icon">
-            <a href="./user.php"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor"
-                    class="bi bi-person-fill" viewBox="0 0 16 16">
+            <a href="./user.php">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
                     <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
-                </svg></a>
+                </svg>
+            </a>
         </div>
     </header>
 
@@ -76,42 +95,43 @@ $promotions = $promoStmt->fetchAll(PDO::FETCH_ASSOC);
                 <button class="btn book">BOOK NOW</button>
             </div>
             <div class="design-2">
+                <!-- All Bookings -->
                 <div class="appointment-container">
-                    <h2>Upcoming Appointments</h2>
-                    <?php foreach ($upcomingAppointments as $appointment): ?>
-                        <div class="appointment-item">
-                            <div>DATE: <?php echo $appointment['appointment_date']; ?> TIME: <?php echo $appointment['start_time']; ?> </div>
-                            <div>
-                                <a href=""><button class="reschedule">Reschedule</button></a>
-                                <a href=""><button class="cancel">Cancel</button></a>
+                    <h2>Your Bookings</h2>
+                    <?php if (!empty($bookings)): ?>
+                        <?php foreach ($bookings as $booking): ?>
+                            <div class="appointment-item">
+                                <div>
+                                    <strong>Service:</strong> <?php echo htmlspecialchars($booking['service_name']); ?><br>
+                                    <strong>Therapist:</strong> <?php echo htmlspecialchars($booking['therapist_name']); ?><br>
+                                    <strong>Date:</strong> <?php echo htmlspecialchars($booking['appointment_date']); ?><br>
+                                    <strong>Time:</strong> <?php echo htmlspecialchars($booking['start_time']); ?> - <?php echo htmlspecialchars($booking['end_time']); ?><br>
+                                    <strong>Status:</strong> <?php echo ucfirst(htmlspecialchars($booking['status'])); ?>
+                                </div>
+                                <?php if ($booking['status'] === 'pending'): ?>
+                                    <div>
+                                        <a href=""><button class="reschedule">Reschedule</button></a>
+                                        <a href=""><button class="cancel">Cancel</button></a>
+                                    </div>
+                                <?php elseif ($booking['status'] === 'completed'): ?>
+                                    <div>
+                                        <a href=""><button class="leave">Leave Review</button></a>
+                                    </div>
+                                <?php endif; ?>
                             </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-
-                <div class="appointment-container">
-                    <h2>Completed Appointments</h2>
-                    <?php foreach ($completedAppointments as $appointment): ?>
-                        <div class="appointment-item">
-                            <div>DATE: <?php echo $appointment['appointment_date']; ?> TIME: <?php echo $appointment['start_time']; ?></div>
-                            <div>
-                                <a href=""><button class="leave">Leave Review</button></a>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <p>No bookings found.</p>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
 
-        <div class="promotions-rewards">
-            <h2>Promotions and Rewards</h2>
-            <?php foreach ($promotions as $promo): ?>
-                <div class="promotion">
-                    <h3><?php echo htmlspecialchars($promo['promo_code']); ?>: <?php echo htmlspecialchars($promo['description']); ?></h3>
-                    <p>Valid until <?php echo $promo['end_date']; ?> with a discount of <?php echo $promo['discount_percent']; ?>%.</p>
-                </div>
-            <?php endforeach; ?>
-        </div>
+        <?php if (!empty($confirmationMessage)): ?>
+            <div class="confirmation-message">
+                <h1><?= $confirmationMessage ?></h1>
+            </div>
+        <?php endif; ?>
     </div>
 </body>
 
