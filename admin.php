@@ -1,7 +1,6 @@
 <?php
 require './database/db.php'; // Include your database connection
 
-// Fetch services
 $queryServices = "SELECT * FROM Services";
 $stmtServices = $pdo->query($queryServices);
 $services = $stmtServices->fetchAll(PDO::FETCH_ASSOC);
@@ -187,7 +186,6 @@ $payments = $stmtPayments->fetchAll(PDO::FETCH_ASSOC);
 </header>
 
 <main>
-    <!-- Manage Bookings -->
     <section id="manage-bookings">
         <h2>Manage Bookings</h2>
         <?php if (!empty($message)): ?>
@@ -286,7 +284,6 @@ $payments = $stmtPayments->fetchAll(PDO::FETCH_ASSOC);
     </form>
 </section>
 
-    <!-- Therapist Schedule Management -->
     <section id="therapist-schedule">
         <h2>Therapist Schedule</h2>
         <form method="POST">

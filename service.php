@@ -63,13 +63,48 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-    <header class="header">
-        <div class="logo"><a href="#">SpaKol</a></div>
+<header class="header">
+        <div class="logo">
+            <a href="#">SpaKol</a>
+        </div>
         <nav class="navbar">
+<<<<<<< HEAD
             <a href="index.php">Home</a>
             <a href="./service.php">Services</a>
             <a href="./user.php">User Dashboard</a>
+=======
+            <a href="./index.php">Home</a>
+            <a href="./service.php">Services</a>
+            <a href="./booking.php">Booking</a>
+>>>>>>> ab83c436bd260dfa804095c5920ed9feaa12efdc
         </nav>
+        <div class="user-icon">
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <?php
+        try {
+            $stmt = $pdo->prepare("SELECT email FROM Users WHERE user_id = :user_id");
+            $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $user_email = $user['email'] ?? "User";
+        } catch (PDOException $e) {
+            $user_email = "User";
+        }
+        ?>
+        <span><?php echo htmlspecialchars($user_email); ?></span>
+        <form action="logout.php" method="post" style="display:inline;">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    <?php else: ?>
+        <a href="register.php">Register</a>
+        <a href="./login.php">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+            </svg>
+        </a>
+    <?php endif; ?>
+</div>
+
     </header>
 
     <section class="filters">
@@ -112,15 +147,13 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <section id="service-cards" class="service-cards">
     <?php 
-    $image_names = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg']; // Assuming image files are in .jpg format
+    $image_names = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg']; 
     $index = 0;
     foreach ($services as $service): 
-        // Error handling for index to avoid undefined image names
         if ($index >= count($image_names)) {
-            $index = 0; // Reset to avoid going out of bounds
+            $index = 0; 
         }
 
-        // Ensure that price and duration are set and valid
         $service_price = isset($service['price']) ? number_format($service['price'], 2) : '0.00';
         $service_duration = isset($service['duration']) ? htmlspecialchars($service['duration']) : 'N/A';
         $service_type = isset($service['service_type']) ? htmlspecialchars($service['service_type']) : 'undefined';

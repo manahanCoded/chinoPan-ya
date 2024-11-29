@@ -3,7 +3,7 @@ require './database/db.php';
 require './database/fetch_booking.php';
 
 $services = getServices($pdo);
-$specialists = getTherapists($pdo); // Fetch spa specialists
+$specialists = getTherapists($pdo);
 $confirmationMessage = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $payment_method = $_POST['payment_method'];
     $promo_code = $_POST['promo_code'] ?? null;
 
+<<<<<<< HEAD
     // Validate therapist exists and has 'therapist' role
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM Users WHERE user_id = :user_id AND role = 'therapist'");
     $stmt->execute([':user_id' => $specialist_id]);
@@ -65,6 +66,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (Exception $e) {
             $confirmationMessage = "Error: " . $e->getMessage();
         }
+=======
+    try {
+        $stmt = $pdo->prepare("SELECT price FROM Services WHERE service_id = :service_id");
+        $stmt->execute([':service_id' => $service_id]);
+        $service = $stmt->fetch(PDO::FETCH_ASSOC);
+        if (!$service) {
+            throw new Exception("Selected service not found.");
+        }
+
+        $service_price = $service['price'];
+
+        $stmt = $pdo->prepare("
+            INSERT INTO booking 
+            (appointment_id, therapist_id, amount, payment_method, payment_status, transaction_id, date, start_time, end_time) 
+            VALUES (:appointment_id, :therapist_id, :amount, :payment_method, 'unpaid', :transaction_id, :date, :start_time, :end_time)
+        ");
+        $transaction_id = uniqid('txn_');
+
+        $stmt->execute([
+            ':appointment_id' => 1,
+            ':therapist_id' => $specialist_id,
+            ':amount' => $service_price,
+            ':payment_method' => $payment_method,
+            ':transaction_id' => $transaction_id,
+            ':date' => $appointment_date,
+            ':start_time' => $time_slot,
+            ':end_time' => date("H:i", strtotime("+1 hour", strtotime($time_slot)))
+        ]);
+
+        $confirmationMessage = "Appointment Confirmed! Your spa appointment has been booked successfully. Transaction ID: $transaction_id.";
+    } catch (PDOException $e) {
+        $confirmationMessage = "Error: " . $e->getMessage();
+    } catch (Exception $e) {
+        $confirmationMessage = "Error: " . $e->getMessage();
+>>>>>>> ab83c436bd260dfa804095c5920ed9feaa12efdc
     }
 }
 ?>
@@ -79,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 <body>
-    <header class="header">
+<header class="header">
         <div class="logo">
             <a href="#">SpaKol</a>
         </div>
@@ -89,25 +125,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <a href="./booking.php">Booking</a>
         </nav>
         <div class="user-icon">
-            <a href="./user.php">
-                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-                </svg>
-            </a>
-        </div>
+    <?php if (isset($_SESSION['user_id'])): ?>
+        <?php
+        try {
+            $stmt = $pdo->prepare("SELECT email FROM Users WHERE user_id = :user_id");
+            $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
+            $stmt->execute();
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+            $user_email = $user['email'] ?? "User";
+        } catch (PDOException $e) {
+            $user_email = "User";
+        }
+        ?>
+        <span><?php echo htmlspecialchars($user_email); ?></span>
+        <form action="logout.php" method="post" style="display:inline;">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    <?php else: ?>
+        <a href="register.php">Register</a>
+        <a href="./login.php">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
+            </svg>
+        </a>
+    <?php endif; ?>
+</div>
+
+    </header>
     </header>
 
     <section id="booking-page">
         <div class="container">
             <?php if (!empty($confirmationMessage)): ?>
-                <!-- Confirmation Message -->
                 <div class="confirmation-message">
                     <h1><?= $confirmationMessage ?></h1>
                 </div>
             <?php else: ?>
-                <!-- Booking Form -->
+
                 <form action="" method="POST">
-                    <!-- Step 1 -->
                     <div class="step">
                         <h2>Step 1: Select Service and Specialist</h2>
                         <label for="service">Spa Service:</label>
@@ -128,8 +183,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php endforeach; ?>
                         </select>
                     </div>
-
-                    <!-- Step 2 -->
                     <div class="step">
                         <h2>Step 2: Choose Date and Time</h2>
                         <label for="appointment-date">Select Date:</label>
@@ -142,8 +195,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <option value="14:00">02:00 PM</option>
                         </select>
                     </div>
-
-                    <!-- Step 3 -->
                     <div class="step">
                         <h2>Step 3: Confirmation and Payment</h2>
                         <label for="payment-method">Payment Method:</label>

@@ -1,9 +1,7 @@
 <?php
-// Start the session at the top of your file
 session_start();
 
-// Include your database connection
-require './database/db.php'; // Adjust this to your actual connection file
+require './database/db.php'; 
 ?>
 
 <!DOCTYPE html>
@@ -28,20 +26,19 @@ require './database/db.php'; // Adjust this to your actual connection file
         <div class="user-icon">
     <?php if (isset($_SESSION['user_id'])): ?>
         <?php
-        // Fetch user email based on session
         try {
             $stmt = $pdo->prepare("SELECT email FROM Users WHERE user_id = :user_id");
             $stmt->bindParam(':user_id', $_SESSION['user_id'], PDO::PARAM_INT);
             $stmt->execute();
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
-            $user_email = $user['email'] ?? "User"; // Default to "User" if no email found
+            $user_email = $user['email'] ?? "User";
         } catch (PDOException $e) {
-            $user_email = "User"; // Default if database error occurs
+            $user_email = "User";
         }
         ?>
         <span><?php echo htmlspecialchars($user_email); ?></span>
         <form action="logout.php" method="post" style="display:inline;">
-            <button type="submit" class="logout-btn">Logout</button>
+            <button type="submit" class="logout-btn" style="padding: 10px; background-color: #DEAA79; color: white; border: none; border-radius: 5px; border-style: solid; cursor: pointer;">Logout</button>
         </form>
     <?php else: ?>
         <a href="register.php">Register</a>

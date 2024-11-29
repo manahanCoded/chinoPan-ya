@@ -1,6 +1,11 @@
 <?php
+<<<<<<< HEAD
 session_start();
 include './database/db.php';
+=======
+session_start(); 
+include './database/db.php'; 
+>>>>>>> ab83c436bd260dfa804095c5920ed9feaa12efdc
 
 if (isset($_SESSION['user_id'])) {
     header("Location: user.php");
@@ -23,8 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($user && password_verify($password, $user['password'])) {
                 $_SESSION['user_id'] = $user['user_id'];
+<<<<<<< HEAD
                 $_SESSION['username'] = $user['username']; // Add username to session
                 header("Location: user.php");
+=======
+                header("Location: index.php");
+>>>>>>> ab83c436bd260dfa804095c5920ed9feaa12efdc
                 exit();
             } else {
                 $error = "Invalid email or password.";
@@ -43,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="stylesheet" href="./userPage_SRC/user.css">
+    <link rel="stylesheet" href="./userPage_SRC/sign.css">
 </head>
 <body>
     <div class="container">

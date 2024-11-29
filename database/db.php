@@ -1,9 +1,8 @@
 <?php
-// Database connection setup
 $host = 'localhost';
-$db = 'spakol_booking'; // Replace with your database name
-$user = 'root'; // Replace with your database username
-$pass = ''; // Replace with your database password
+$db = 'spakol_booking'; 
+$user = 'root'; 
+$pass = ''; 
 $charset = 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
