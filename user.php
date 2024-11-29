@@ -49,6 +49,7 @@ unset($_SESSION['appointment_confirmation']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Dashboard</title>
     <link rel="stylesheet" href="./userPage_SRC/user.css">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 
 <body>
@@ -96,7 +97,7 @@ unset($_SESSION['appointment_confirmation']);
 
         <div class="row">
             <div class="design-1">
-                <button class="btn book">BOOK NOW</button>
+                <a href="booking.php"><button class="btn book">BOOK NOW</button></a>
             </div>
             <div class="design-2">
                 <div class="appointment-container">
