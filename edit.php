@@ -100,7 +100,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change-password'])) {
         </div>
     </header>
     <div class="container">
-        <h1>Account Settings</h1>
+        <h1>Edit Account Settings</h1>
 
         <?php
         if (isset($message)) {

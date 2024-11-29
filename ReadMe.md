@@ -85,3 +85,30 @@ CREATE TABLE booking (
     FOREIGN KEY (therapist_id) REFERENCES Users(user_id) ON DELETE CASCADE
 );
 
+
+
+<!-- MADE UP DATA -->
+
+<!-- USERS -->
+INSERT INTO users (full_name, email, phone_number, password, role) VALUES
+('Maria Santos', 'maria.santos@email.com', '+63 912 345 6789', '1234abcd', 'admin'),
+('John Doe', 'john.doe@email.com', '+63 932 234 5678', 'j0hn!234', 'customer'),
+('Ella Reyes', 'ella.reyes@email.com', '+63 933 876 5432', 'ella#2024', 'therapist'),
+('Mark Perez', 'mark.perez@email.com', '+63 918 765 4321', 'mark2024!', 'customer'),
+('Lisa Tan', 'lisa.tan@email.com', '+63 917 654 3210', 'l!saTn123', 'therapist'),
+('Daniel Cruz', 'daniel.cruz@email.com', '+63 915 123 4567', 'danielC@2024', 'therapist'),
+('Sophia Lim', 'sophia.lim@email.com', '+63 916 987 6543', 'S0ph!aLim', 'therapist'),
+('James Lee', 'james.lee@email.com', '+63 919 876 5432', 'j@m3sL33!', 'therapist');
+
+
+
+<!-- SERVICES -->
+INSERT INTO services (service_id, service_name, description, duration, price)
+VALUES
+(1, 'Foot Massage', 'A relaxing massage focused on the feet to relieve stress.', 30, 800.00),
+(2, 'Aromatherapy Massage', 'A full-body massage using essential oils to enhance relaxation.', 60, 1500.00),
+(3, 'Head, Neck & Shoulder Massage', 'Targeted massage for the head, neck, and shoulders.', 45, 1200.00),
+(4, 'Add-Ons: Hot Towel Treatment', 'An add-on treatment to any massage session, including hot towels.', 15, 500.00),
+(5, 'Full Body Massage', 'A comprehensive massage that addresses all major muscle groups.', 90, 1800.00),
+(6, 'Relaxing Facial', 'A rejuvenating facial treatment using natural products.', 60, 2000.00),
+(15, 'Hot Stone Massage', 'Hot stone massage spa.', 75, 1800.00);

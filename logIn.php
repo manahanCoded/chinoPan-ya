@@ -1,7 +1,13 @@
 <?php
+<<<<<<< HEAD
 session_start();
 include './database/db.php';
 
+=======
+
+session_start(); 
+include './database/db.php'; 
+>>>>>>> bd68a37489b8969f8171620e29a90db80b9f23c5
 if (isset($_SESSION['user_id'])) {
     header("Location: user.php");
     exit();
@@ -26,7 +32,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['username'] = $user['username']; // Add username to session
                 header("Location: user.php");
                 header("Location: index.php");
+<<<<<<< HEAD
 
+=======
+>>>>>>> bd68a37489b8969f8171620e29a90db80b9f23c5
                 exit();
             } else {
                 $error = "Invalid email or password.";
@@ -49,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 <body>
     <div class="container">
-        <h1>LOGIN</h1>
+        <h1 class="headd">LOGIN</h1>
         <h3>Welcome!</h3>
         <?php if ($error): ?>
             <p style="color: red;"><?php echo htmlspecialchars($error); ?></p>
@@ -64,6 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Login</button>
         </form>
         <p>Don't have an account? <a href="register.php">Register here</a>.</p>
+        <a href="index.php" class="back-home">Go Back</a>
     </div>
 </body>
 </html>

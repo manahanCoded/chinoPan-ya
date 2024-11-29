@@ -8,14 +8,14 @@
     text-align: center;
 }
 
-h1 {
-    color: green;
+h1.headd {
+    color: #4F3222;
     font-size: 36px;
     margin: 0;
 }
 
 h3 {
-    color: #333;
+    color: #4F3222;
     font-size: 18px;
     margin: 10px 0 20px;
 }
@@ -80,4 +80,30 @@ form button:hover {
 
 .register-link a:hover {
     text-decoration: underline;
+}
+
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.back-home {
+    display: inline-block;
+    margin-top: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.back-home:hover {
+    background-color: #218838;
 }

@@ -82,9 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <header class="header">
-        <div class="logo">
-            <a href="#">SpaKol</a>
-        </div>
+        <div class="logo"><a href="#">SpaKol</a></div>
         <nav class="navbar">
             <a href="./index.php">Home</a>
             <a href="./service.php">Services</a>
