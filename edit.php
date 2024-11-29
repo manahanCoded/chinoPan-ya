@@ -81,22 +81,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change-password'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Account Settings</title>
-    <link rel="stylesheet" href="./userPage_SRC/user.css">
+    <link rel="stylesheet" href="./userPage_SRC/edit.css">
+    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
 </head>
 
 <body>
-    <header class="navbar">
-        <div class="logo">SpaKol</div>
-        <nav>
-            <a href="home.html">Home</a>
-            <a href="#about">About</a>
-            <a href="services.html">Services</a>
-            <a href="#contacts">Contact</a>
+<header>
+        <div class="logo"><a href="#">SpaKol</a></div>
+        <nav class="navbar">
+            <a href="./index.php">Home</a>
+            <a href="./service.php">Services</a>
+            <a href="./booking.php">Booking</a>
         </nav>
         <div class="user-icon">
-            <a href="./profile.php"><svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
-                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6"/>
-            </svg></a>
+            <a href="./user.php">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                    <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+                </svg>
+            </a>
         </div>
     </header>
     <div class="container">
