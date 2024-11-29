@@ -82,7 +82,7 @@ unset($_SESSION['appointment_confirmation']);
             <div class="profile-container">
                 <div class="profile-header">
                     <img src="./homePage_SRC/jaybee.jpg" alt="Profile Picture" class="profile-image">
-                    <a href="account.php">
+                    <a href="edit.php">
                         <button class="edit-button">Edit</button>
                     </a>
                 </div>
