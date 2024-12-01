@@ -71,13 +71,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-<<<<<<< HEAD
 // Handle service actions (add, edit, delete)
 $editService = null; // For holding the service being edited
-=======
-$stmtServices = $pdo->query($queryServices);
-$services = $stmtServices->fetchAll(PDO::FETCH_ASSOC);
->>>>>>> 1a5b2312fcd8137179508e4fd82a6ab2970fbae3
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add_service'])) {
@@ -131,7 +126,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $services = $stmtServices->fetchAll(PDO::FETCH_ASSOC);
 }
 
-<<<<<<< HEAD
 // Fetch service for editing (pre-populate the form)
 if (isset($_GET['edit_service_id'])) {
     $editServiceId = $_GET['edit_service_id'];
@@ -143,8 +137,6 @@ if (isset($_GET['edit_service_id'])) {
 }
 
 // Fetch payments for reports
-=======
->>>>>>> 1a5b2312fcd8137179508e4fd82a6ab2970fbae3
 $queryPayments = "
     SELECT 
         p.payment_id, 
@@ -221,15 +213,25 @@ $payments = $stmtPayments->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= htmlspecialchars($appointment['service_name']) ?></td>
                         <td><?= htmlspecialchars($appointment['therapist_name']) ?></td>
                         <td><?= htmlspecialchars($appointment['date']) ?></td>
-                        <td><?= htmlspecialchars($appointment['start_time']) ?> - <?= htmlspecialchars($appointment['end_time']) ?></td>
+                        <td><?= htmlspecialchars($appointment['start_time']) . ' - ' . htmlspecialchars($appointment['end_time']) ?></td>
                         <td><?= htmlspecialchars($appointment['appointment_status']) ?></td>
                         <td>
-                            <form method="POST" action="#manage-bookings" style="display:inline;">
-                                <input type="hidden" name="appointment_id" value="<?= $appointment['appointment_id'] ?>">
-                                <button name="action" value="approve" <?= $appointment['appointment_status'] === 'confirmed' ? 'disabled' : '' ?>>Approve</button>
-                                <button name="action" value="cancel" <?= $appointment['appointment_status'] === 'canceled' ? 'disabled' : '' ?>>Cancel</button>
-                                <button name="action" value="complete" <?= $appointment['appointment_status'] === 'completed' ? 'disabled' : '' ?>>Complete</button>
-                            </form>
+                            <?php if ($appointment['appointment_status'] == 'pending'): ?>
+                                <form method="POST" style="display:inline;">
+                                    <input type="hidden" name="appointment_id" value="<?= $appointment['appointment_id'] ?>">
+                                    <button type="submit" name="action" value="approve">Approve</button>
+                                </form>
+                                <form method="POST" style="display:inline;">
+                                    <input type="hidden" name="appointment_id" value="<?= $appointment['appointment_id'] ?>">
+                                    <button type="submit" name="action" value="cancel">Cancel</button>
+                                </form>
+                            <?php endif; ?>
+                            <?php if ($appointment['appointment_status'] == 'confirmed'): ?>
+                                <form method="POST" style="display:inline;">
+                                    <input type="hidden" name="appointment_id" value="<?= $appointment['appointment_id'] ?>">
+                                    <button type="submit" name="action" value="complete">Complete</button>
+                                </form>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -259,10 +261,13 @@ $payments = $stmtPayments->fetchAll(PDO::FETCH_ASSOC);
                         <td>$<?= htmlspecialchars($service['price']) ?></td>
                         <td><?= htmlspecialchars($service['duration']) ?> mins</td>
                         <td>
-                            <a href="?edit_service_id=<?= $service['service_id'] ?>#manage-services">Edit</a>
+                            <form method="GET" action="#manage-services" style="display:inline;">
+                                <input type="hidden" name="edit_service_id" value="<?= $service['service_id'] ?>">
+                                <button type="submit">Edit</button>
+                            </form>
                             <form method="POST" action="#manage-services" style="display:inline;">
                                 <input type="hidden" name="service_id" value="<?= $service['service_id'] ?>">
-                                <button name="delete_service" onclick="return confirm('Are you sure?')">Delete</button>
+                                <button name="delete_service" onclick="return confirm('Are you sure you want to delete this service?');">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -285,10 +290,7 @@ $payments = $stmtPayments->fetchAll(PDO::FETCH_ASSOC);
         </form>
     </section>
 
-<<<<<<< HEAD
     <!-- Payments and Reports -->
-=======
->>>>>>> 1a5b2312fcd8137179508e4fd82a6ab2970fbae3
     <section id="payments-reports">
         <h2>Payments & Reports</h2>
         <table>

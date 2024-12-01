@@ -10,6 +10,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id']; 
 
 try {
+    // Fetch user details
     $stmt = $pdo->prepare("SELECT full_name, email, phone_number FROM Users WHERE user_id = ?");
     $stmt->execute([$user_id]);
     $user = $stmt->fetch();
@@ -18,17 +19,46 @@ try {
         die("User not found.");
     }
 
+    // Handle appointment cancellation
+    if (isset($_POST['cancel_appointment_id'])) {
+        $appointment_id = intval($_POST['cancel_appointment_id']);
+
+        // Check if the appointment belongs to the user and is cancellable
+        $stmt = $pdo->prepare("
+            SELECT appointment_id, status 
+            FROM Appointments 
+            WHERE appointment_id = ? AND user_id = ? AND status = 'pending'
+        ");
+        $stmt->execute([$appointment_id, $user_id]);
+        $appointment = $stmt->fetch();
+
+        if ($appointment) {
+            // Update the appointment status to 'cancelled'
+            $updateStmt = $pdo->prepare("UPDATE Appointments SET status = 'cancelled' WHERE appointment_id = ?");
+            $updateStmt->execute([$appointment_id]);
+
+            $confirmationMessage = "Your appointment has been successfully cancelled.";
+        } else {
+            $confirmationMessage = "Unable to cancel the appointment. It may have already been processed.";
+        }
+    }
+
+    // Fetch user bookings and associated reviews
     $stmtBookings = $pdo->prepare("
         SELECT 
+            a.appointment_id,
             a.appointment_date, 
             a.start_time, 
             a.end_time, 
             s.service_name, 
             u.full_name AS therapist_name, 
-            a.status 
+            a.status,
+            r.rating AS review_rating,
+            r.comment AS review_comment
         FROM Appointments a
         JOIN Services s ON a.service_id = s.service_id
         JOIN Users u ON a.therapist_id = u.user_id
+        LEFT JOIN Reviews r ON a.appointment_id = r.appointment_id
         WHERE a.user_id = ?
         ORDER BY a.appointment_date ASC, a.start_time ASC
     ");
@@ -38,8 +68,6 @@ try {
 } catch (PDOException $e) {
     die("Error: " . $e->getMessage());
 }
-$confirmationMessage = $_SESSION['appointment_confirmation'] ?? '';
-unset($_SESSION['appointment_confirmation']); 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,6 +78,16 @@ unset($_SESSION['appointment_confirmation']);
     <title>User Dashboard</title>
     <link rel="stylesheet" href="./userPage_SRC/user.css">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <style>
+        .review-rating .filled-star {
+            color: #FFD700; /* Yellow for filled stars */
+            font-size: 20px;
+        }
+        .review-rating .empty-star {
+            color: #ccc; /* Gray for empty stars */
+            font-size: 20px;
+        }
+    </style>
 </head>
 
 <body>
@@ -98,11 +136,7 @@ unset($_SESSION['appointment_confirmation']);
 
         <div class="row">
             <div class="design-1">
-<<<<<<< HEAD
-                <a href="./booking.php"<button class="btn book">BOOK NOW</button></a>
-=======
                 <a href="booking.php"><button class="btn book">BOOK NOW</button></a>
->>>>>>> 1a5b2312fcd8137179508e4fd82a6ab2970fbae3
             </div>
             <div class="design-2">
                 <div class="appointment-container">
@@ -117,16 +151,33 @@ unset($_SESSION['appointment_confirmation']);
                                     <strong>Time:</strong> <?php echo htmlspecialchars($booking['start_time']); ?> - <?php echo htmlspecialchars($booking['end_time']); ?><br>
                                     <strong>Status:</strong> <?php echo ucfirst(htmlspecialchars($booking['status'])); ?>
                                 </div>
-                                <?php if ($booking['status'] === 'pending'): ?>
-                                    <div>
-                                        <a href=""><button class="reschedule">Reschedule</button></a>
-                                        <a href=""><button class="cancel">Cancel</button></a>
-                                    </div>
-                                <?php elseif ($booking['status'] === 'completed'): ?>
-                                    <div>
-                                        <a href=""><button class="leave">Leave Review</button></a>
-                                    </div>
-                                <?php endif; ?>
+                                <div>
+                                    <?php if ($booking['status'] === 'pending'): ?>
+                                        <a href="re-sched.php?appointment_id=<?php echo $booking['appointment_id']; ?>"><button class="reschedule">Reschedule</button></a>
+                                        <form method="POST" style="display:inline;">
+                                            <input type="hidden" name="cancel_appointment_id" value="<?php echo $booking['appointment_id']; ?>">
+                                            <button type="submit" class="cancel">Cancel</button>
+                                        </form>
+                                    <?php elseif ($booking['status'] === 'completed'): ?>
+                                        <?php if ($booking['review_rating']): ?>
+                                            <div class="review-section styled-review">
+                                                <div class="review-header">
+                                                    <span class="review-user"><?php echo htmlspecialchars($user['full_name']); ?></span>
+                                                    <span class="review-rating">
+                                                        <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                            <span class="<?php echo $i <= $booking['review_rating'] ? 'filled-star' : 'empty-star'; ?>">★</span>
+                                                        <?php endfor; ?>
+                                                    </span>
+                                                </div>
+                                                <p class="review-comment"><?php echo nl2br(htmlspecialchars($booking['review_comment'])); ?></p>
+                                            </div>
+                                        <?php else: ?>
+                                            <a href="review.php?appointment_id=<?php echo $booking['appointment_id']; ?>">
+                                                <button class="leave">Leave Review</button>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
                             </div>
                         <?php endforeach; ?>
                     <?php else: ?>

@@ -281,3 +281,37 @@ header .logo a {
         padding: 10px 20px;
     }
 }
+
+.styled-review {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 15px;
+    margin-top: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.review-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.review-user {
+    font-weight: bold;
+    font-size: 16px;
+    color: #333;
+}
+
+.review-rating {
+    font-size: 18px;
+    color: #f1c40f;
+}
+
+.review-comment {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.6;
+    margin-top: 10px;
+}
