@@ -66,9 +66,10 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <header class="header">
         <div class="logo"><a href="#">SpaKol</a></div>
         <nav class="navbar">
-            <a href="index.php">Home</a>
+        <a href="./index.php">Home</a>
             <a href="./service.php">Services</a>
             <a href="./booking.php">Booking</a>
+            <a href="./user.php">Appointment</a>
         </nav>
         <div class="user-icon">
             <a href="./user.php">

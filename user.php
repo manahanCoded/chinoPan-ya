@@ -3,7 +3,7 @@ require './database/db.php';
 session_start(); 
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: logIn.php");
+    header("Location: login.php");
     exit();
 }
 
@@ -58,6 +58,7 @@ unset($_SESSION['appointment_confirmation']);
             <a href="./index.php">Home</a>
             <a href="./service.php">Services</a>
             <a href="./booking.php">Booking</a>
+            <a href="./user.php">Appointment</a>
         </nav>
         <div class="user-icon">
             <a href="./user.php">
@@ -72,7 +73,7 @@ unset($_SESSION['appointment_confirmation']);
             <div class="welcome-section">
                 <h1>Welcome to SpaKol, <?php echo htmlspecialchars($user['full_name']); ?>!</h1>
                 <p>Relax, refresh, and rejuvenate with our premium services. Explore our offerings and manage your bookings below.</p>
-                <button onclick="location.href='./booking.php'" class="explore-button">Explore Services</button>
+                <button onclick="location.href='./service.php'" class="explore-button">Explore Services</button>
             </div>
         </div>
     </div>
@@ -82,7 +83,7 @@ unset($_SESSION['appointment_confirmation']);
             <div class="profile-container">
                 <div class="profile-header">
                     <img src="./homePage_SRC/jaybee.jpg" alt="Profile Picture" class="profile-image">
-                    <a href="edit.php">
+                    <a href="./edit.php">
                         <button class="edit-button">Edit</button>
                     </a>
                 </div>
@@ -96,7 +97,7 @@ unset($_SESSION['appointment_confirmation']);
 
         <div class="row">
             <div class="design-1">
-                <button class="btn book">BOOK NOW</button>
+                <a href="./booking.php"<button class="btn book">BOOK NOW</button></a>
             </div>
             <div class="design-2">
                 <div class="appointment-container">

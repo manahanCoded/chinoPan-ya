@@ -22,6 +22,7 @@ require './database/db.php';
             <a href="./index.php">Home</a>
             <a href="./service.php">Services</a>
             <a href="./booking.php">Booking</a>
+            <a href="./user.php">Appointment</a>
         </nav>
         <div class="user-icon">
     <?php if (isset($_SESSION['user_id'])): ?>
