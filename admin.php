@@ -2,6 +2,13 @@
 require './database/db.php'; 
 session_start();  
 
+// Ensure the user is logged in and is an admin
+if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+    // If the user is not logged in as admin, redirect to the login page
+    header("Location: logIn.php");
+    exit();
+}
+
 $queryServices = "SELECT * FROM Services";
 $stmtServices = $pdo->query($queryServices);
 $services = $stmtServices->fetchAll(PDO::FETCH_ASSOC);

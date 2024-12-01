@@ -108,9 +108,22 @@ require './database/db.php';
     </section>
 
     <footer class="cta">
-        <h2>Book Your Appointment Today</h2>
-        <a href="register.php"><button>Create Account</button></a>
-        <a href="booking.php"><button>Schedule Now</button></a>
+        <?php
+        if (isset($_SESSION['role'])) {
+            if ($_SESSION['role'] == 'admin') {
+                // If the user is an admin, show the Admin Dashboard button
+                echo '<a href="admin.php"><button>Admin Dashboard</button></a>';
+            } else {
+                // If the user is not an admin, show the "Create Account" button
+                echo '<a href="register.php"><button>Create Account</button></a>';
+            }
+        } else {
+            // If the user is not logged in, just show the "Create Account" button
+            echo '<a href="register.php"><button>Create Account</button></a>';
+        }
+        ?>
+
+    <a href="booking.php"><button>Schedule Now</button></a>
     </footer>
 </body>
 </html>
