@@ -37,7 +37,7 @@ header .logo a {
     gap: 15px;
 }
 
-.navbar a {
+.navbar  a {
     color: white;
     text-decoration: none;
     font-size: 18px;
@@ -47,7 +47,7 @@ header .logo a {
     text-decoration: underline;
 }
 
-.user-icon a {
+.user-icon a{
     font-size: 1.5rem;
     cursor: pointer;
     color: white;

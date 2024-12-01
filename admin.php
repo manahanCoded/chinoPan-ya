@@ -1,13 +1,11 @@
 <?php 
-require './database/db.php'; // Include your database connection
+require './database/db.php'; 
 session_start();  
 
-// Fetch services
 $queryServices = "SELECT * FROM Services";
 $stmtServices = $pdo->query($queryServices);
 $services = $stmtServices->fetchAll(PDO::FETCH_ASSOC);
 
-// Fetch appointments with filters for status
 $filterStatus = isset($_GET['status']) ? $_GET['status'] : 'all';
 $queryAppointments = "
     SELECT 
@@ -29,7 +27,6 @@ if ($filterStatus !== 'all') {
     $queryAppointments .= " WHERE a.status = :status";
 }
 
-// Order by appointment date in descending order
 $queryAppointments .= " ORDER BY a.appointment_date DESC";
 
 $stmtAppointments = $pdo->prepare($queryAppointments);
@@ -41,7 +38,6 @@ if ($filterStatus !== 'all') {
 }
 $appointments = $stmtAppointments->fetchAll(PDO::FETCH_ASSOC);
 
-// Handle POST requests for status updates
 $message = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? null;
@@ -70,18 +66,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "Error: " . $e->getMessage();
         }
 
-        // Re-fetch updated appointments after the operation
         $stmtAppointments->execute();
         $appointments = $stmtAppointments->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 
+<<<<<<< HEAD
 // Handle service actions (add, edit, delete)
 $editService = null; // For holding the service being edited
+=======
+$stmtServices = $pdo->query($queryServices);
+$services = $stmtServices->fetchAll(PDO::FETCH_ASSOC);
+>>>>>>> 1a5b2312fcd8137179508e4fd82a6ab2970fbae3
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add_service'])) {
-        // Add a new service
         $name = $_POST['name'];
         $description = $_POST['description'];
         $price = $_POST['price'];
@@ -94,7 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $message = "Service added successfully!";
         
     } elseif (isset($_POST['edit_service'])) {
-        // Edit an existing service
         $id = $_POST['service_id'];
         $name = $_POST['name'];
         $description = $_POST['description'];
@@ -111,10 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: ".$_SERVER['PHP_SELF']."#manage-services");
         exit;  // Stop further script execution after redirection
     } elseif (isset($_POST['delete_service'])) {
-        // Delete a service
         $id = $_POST['service_id'];
 
-        // Check if the service is referenced in appointments
         $queryCheck = "SELECT COUNT(*) FROM Appointments WHERE service_id = :id";
         $stmtCheck = $pdo->prepare($queryCheck);
         $stmtCheck->execute([':id' => $id]);
@@ -131,11 +127,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Refresh the services list after any action
     $stmtServices = $pdo->query($queryServices);
     $services = $stmtServices->fetchAll(PDO::FETCH_ASSOC);
 }
 
+<<<<<<< HEAD
 // Fetch service for editing (pre-populate the form)
 if (isset($_GET['edit_service_id'])) {
     $editServiceId = $_GET['edit_service_id'];
@@ -147,6 +143,8 @@ if (isset($_GET['edit_service_id'])) {
 }
 
 // Fetch payments for reports
+=======
+>>>>>>> 1a5b2312fcd8137179508e4fd82a6ab2970fbae3
 $queryPayments = "
     SELECT 
         p.payment_id, 
@@ -172,15 +170,21 @@ $payments = $stmtPayments->fetchAll(PDO::FETCH_ASSOC);
 
 <header>
     <div class="logo"><a href="#">SpaKol Admin</a></div>
-    <nav>
+    <nav class="navbar">
         <a href="#manage-bookings">Manage Bookings</a>
         <a href="#manage-services">Manage Services</a>
         <a href="#payments-reports">Payments & Reports</a>
     </nav>
+    <div class="user-icon">
+        <a href="./user.php">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+            </svg>
+        </a>
+    </div>
 </header>
 
 <main>
-    <!-- Manage Bookings -->
     <section id="manage-bookings">
         <h2>Manage Appointments</h2>
         <?php if (!empty($message)): ?>
@@ -233,7 +237,6 @@ $payments = $stmtPayments->fetchAll(PDO::FETCH_ASSOC);
         </table>
     </section>
 
-    <!-- Manage Services -->
     <section id="manage-services">
         <h2>Manage Services</h2>
         <table>
@@ -282,7 +285,10 @@ $payments = $stmtPayments->fetchAll(PDO::FETCH_ASSOC);
         </form>
     </section>
 
+<<<<<<< HEAD
     <!-- Payments and Reports -->
+=======
+>>>>>>> 1a5b2312fcd8137179508e4fd82a6ab2970fbae3
     <section id="payments-reports">
         <h2>Payments & Reports</h2>
         <table>

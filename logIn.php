@@ -1,7 +1,10 @@
 <?php
 session_start(); 
 include './database/db.php'; 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1a5b2312fcd8137179508e4fd82a6ab2970fbae3
 if (isset($_SESSION['user_id'])) {
     header("Location: user.php");
     exit();
@@ -26,7 +29,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['username'] = $user['username']; // Add username to session
                 header("Location: user.php");
                 header("Location: index.php");
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1a5b2312fcd8137179508e4fd82a6ab2970fbae3
                 exit();
             } else {
                 $error = "Invalid email or password.";
