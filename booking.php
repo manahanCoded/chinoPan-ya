@@ -79,9 +79,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Spa Booking Page</title>
     <link rel="stylesheet" href="./bookingPage_SRC/booking.css">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
 </head>
 <body>
-    <header class="header">
+    <header class="header" data-aos='fade-down'>
         <div class="logo"><a href="#">SpaKol</a></div>
         <nav class="navbar">
             <a href="./index.php">Home</a>
@@ -98,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </header>
 
-    <section id="booking-page">
+    <section id="booking-page" data-aos="fade-up-right">
         <div class="container">
             <?php if (!empty($confirmationMessage)): ?>
                 <!-- Confirmation Message -->
@@ -163,5 +164,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php endif; ?>
         </div>
     </section>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
 </html>

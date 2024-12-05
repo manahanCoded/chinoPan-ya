@@ -2,17 +2,13 @@
 session_start();
 require './database/db.php';
 
-
-
 $typeFilter = $_GET['service_type'] ?? 'all';
 $priceFilter = $_GET['price'] ?? 'all';
 $durationFilter = $_GET['duration'] ?? 'all';
 $sortBy = $_GET['sort'] ?? 'price';
 
-
 $query = "SELECT * FROM Services WHERE 1=1";
 $params = [];
-
 
 if ($typeFilter !== 'all') {
     $query .= " AND service_type = :service_type";
@@ -45,7 +41,6 @@ if ($sortBy === 'price') {
     $query .= " ORDER BY duration ASC";
 }
 
-
 $stmt = $pdo->prepare($query);
 $stmt->execute($params);
 $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -59,14 +54,16 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Massage Services</title>
     <link rel="stylesheet" href="./servicePage_SRC/services.css">
-    <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet">
+    <!-- AOS Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
 </head>
 
 <body>
-    <header class="header">
+    <header class="header" data-aos="fade-down">
         <div class="logo"><a href="#">SpaKol</a></div>
         <nav class="navbar">
-        <a href="./index.php">Home</a>
+            <a href="./index.php">Home</a>
             <a href="./service.php">Services</a>
             <a href="./booking.php">Booking</a>
             <a href="./user.php">Appointment</a>
@@ -80,7 +77,7 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </header>
 
-    <section class="filters">
+    <section class="filters" data-aos="fade-up">
         <form method="GET" action="">
             <div class="filter-options">
                 <select id="service-type-filter" name="service_type">
@@ -119,36 +116,38 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </section>
 
     <section id="service-cards" class="service-cards">
-    <?php 
-    $image_names = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg']; // Assuming image files are in .jpg format
-    $index = 0;
-    foreach ($services as $service): 
-        if ($index >= count($image_names)) {
-            $index = 0; // Reset to avoid going out of bounds
-        }
+        <?php 
+        $image_names = ['1.jpg', '2.jpg', '3.jpg', '4.jpg', '5.jpg', '6.jpg', '7.jpg'];
+        $index = 0;
+        foreach ($services as $service): 
+            if ($index >= count($image_names)) {
+                $index = 0;
+            }
 
-        $service_price = isset($service['price']) ? number_format($service['price'], 2) : '0.00';
-        $service_duration = isset($service['duration']) ? htmlspecialchars($service['duration']) : 'N/A';
-        $service_type = isset($service['service_type']) ? htmlspecialchars($service['service_type']) : 'undefined';
-        $service_name = isset($service['service_name']) ? htmlspecialchars($service['service_name']) : 'No Name';
-        $service_description = isset($service['description']) ? htmlspecialchars($service['description']) : 'No Description';
-    ?>
-        <div class="service-card" data-type="<?= $service_type; ?>" data-price="<?= $service_price; ?>" data-duration="<?= $service_duration; ?>">
+            $service_price = isset($service['price']) ? number_format($service['price'], 2) : '0.00';
+            $service_duration = isset($service['duration']) ? htmlspecialchars($service['duration']) : 'N/A';
+            $service_type = isset($service['service_type']) ? htmlspecialchars($service['service_type']) : 'undefined';
+            $service_name = isset($service['service_name']) ? htmlspecialchars($service['service_name']) : 'No Name';
+            $service_description = isset($service['description']) ? htmlspecialchars($service['description']) : 'No Description';
+        ?>
+        <div class="service-card" data-aos="zoom-in">
             <img src="./servicePage_SRC/<?= htmlspecialchars($image_names[$index]); ?>" alt="<?= $service_name; ?>">
             <h3><?= $service_name; ?></h3>
             <p><?= $service_description; ?></p>
             <p class="price">₱<?= $service_price; ?></p>
             <p class="duration">Duration: <?= $service_duration; ?> mins</p>
-            <a href="./booking.php? service_id=<?= htmlspecialchars($service['service_id']); ?>"><button>Book Now</button></a>
+            <a href="./booking.php?service_id=<?= htmlspecialchars($service['service_id']); ?>"><button>Book Now</button></a>
         </div>
-    <?php 
-    $index++;
-    endforeach; 
-    ?>
-</section>
+        <?php 
+        $index++;
+        endforeach; 
+        ?>
+    </section>
 
-
-<script src="./servicePage_SRC/services.js"></script>
+    <!-- AOS Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
 </body>
-
 </html>

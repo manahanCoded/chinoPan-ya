@@ -1,36 +1,31 @@
 <?php
 include './database/db.php';
+session_start();
 
-session_start();  
-
-// Redirect to login if the user is not authenticated
 if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php"); 
+    header("Location: login.php");
     exit();
 }
 
-// Fetch the logged-in user's ID
 $user_id = $_SESSION['user_id'];
 
-// Fetch user details
 $stmt = $pdo->prepare("SELECT * FROM Users WHERE user_id = :user_id");
 $stmt->bindParam(':user_id', $user_id);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-// Redirect admin users to the dashboard
 if ($user['role'] === 'admin') {
     header("Location: admin-dashboard.php");
     exit();
 }
 
-// Profile update logic
+$message = "";
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update-profile'])) {
     $full_name = $_POST['name'];
     $email = $_POST['email'];
     $phone_number = $_POST['phone'];
 
-    // Update the user's profile in the database
     $sql = "UPDATE Users SET full_name = :full_name, email = :email, phone_number = :phone_number, updated_at = NOW() WHERE user_id = :user_id";
     $stmt = $pdo->prepare($sql);
     $stmt->bindParam(':full_name', $full_name);
@@ -38,28 +33,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['update-profile'])) {
     $stmt->bindParam(':phone_number', $phone_number);
     $stmt->bindParam(':user_id', $user_id);
 
-    // Check if the update was successful
     if ($stmt->execute()) {
-        $_SESSION['message'] = "Profile updated successfully!";
-        header("Location: user.php"); // Redirect to user.php after saving
-        exit();
-    } else {
-        $_SESSION['message'] = "Failed to update profile.";
+        $message = "Profile updated successfully!";
         header("Location: user.php");
         exit();
+    } else {
+        $message = "Failed to update profile.";
     }
 }
 
-// Password change logic
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change-password'])) {
     $old_password = $_POST['old-password'];
     $new_password = $_POST['new-password'];
     $confirm_password = $_POST['confirm-password'];
 
     if ($new_password !== $confirm_password) {
-        $_SESSION['message'] = "Passwords do not match.";
-        header("Location: user.php");
-        exit();
+        $message = "Passwords do not match.";
     } else {
         $stmt = $pdo->prepare("SELECT password FROM Users WHERE user_id = :user_id");
         $stmt->bindParam(':user_id', $user_id);
@@ -74,22 +63,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change-password'])) {
             $stmt->bindParam(':user_id', $user_id);
 
             if ($stmt->execute()) {
-                $_SESSION['message'] = "Password changed successfully!";
+                $message = "Password changed successfully!";
                 header("Location: user.php");
                 exit();
             } else {
-                $_SESSION['message'] = "Failed to change password.";
-                header("Location: user.php");
-                exit();
+                $message = "Failed to change password.";
             }
         } else {
-            $_SESSION['message'] = "Old password is incorrect.";
-            header("Location: user.php");
-            exit();
+            $message = "Old password is incorrect.";
         }
     }
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -119,14 +103,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['change-password'])) {
             </a>
         </div>
     </header>
-
     <div class="container">
         <h1>Edit Account Settings</h1>
 
         <?php
-        if (isset($_SESSION['message'])) {
-            echo "<p class='message'>" . $_SESSION['message'] . "</p>";
-            unset($_SESSION['message']); // Clear the message after displaying it
+        if (!empty($message)) {
+            echo "<p class='message'>$message</p>";
         }
         ?>
 

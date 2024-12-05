@@ -2,8 +2,19 @@ body {
     font-family: 'Poppins', sans-serif;
     background-color: #f4f4f4;
     margin: 0;
-    padding: 0;
+    padding: 0;background: url('spakol.jpg') no-repeat center center fixed; /* Add your background image path */
+    background-size: cover;
+    animation: backgroundAnimation 10s infinite alternate ease-in-out; /* Background animation */
 }
+
+/* Background Animation */
+@keyframes backgroundAnimation {
+    0% { filter: brightness(1); }
+    50% { filter: brightness(1.2); }
+    100% { filter: brightness(1); }
+}
+
+
 
 header {
     background-color: #DEAA79;

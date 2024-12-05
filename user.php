@@ -78,20 +78,11 @@ try {
     <title>User Dashboard</title>
     <link rel="stylesheet" href="./userPage_SRC/user.css">
     <link href='https://fonts.googleapis.com/css?family=Poppins' rel='stylesheet'>
-    <style>
-        .review-rating .filled-star {
-            color: #FFD700; /* Yellow for filled stars */
-            font-size: 20px;
-        }
-        .review-rating .empty-star {
-            color: #ccc; /* Gray for empty stars */
-            font-size: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
 </head>
 
 <body>
-    <header>
+    <header data-aos='zoom-in'>
         <div class="logo"><a href="#">SpaKol</a></div>
         <nav class="navbar">
             <a href="./index.php">Home</a>
@@ -107,7 +98,7 @@ try {
             </a>
         </div>
     </header>
-    <div class="container">
+    <div class="container" data-aos="fade-up-right">
         <div class="after-header">
             <div class="welcome-section">
                 <h1>Welcome to SpaKol, <?php echo htmlspecialchars($user['full_name']); ?>!</h1>
@@ -117,7 +108,7 @@ try {
         </div>
     </div>
         
-    <div class="container">
+    <div class="container" data-aos='fade-up'>
         <div class="center-bod">
             <div class="profile-container">
                 <div class="profile-header">
@@ -139,7 +130,7 @@ try {
                 <a href="booking.php"><button class="btn book">BOOK NOW</button></a>
             </div>
             <div class="design-2">
-                <div class="appointment-container">
+                <div class="appointment-container" data-aos='flip-right'>
                     <h2>Your Bookings</h2>
                     <?php if (!empty($bookings)): ?>
                         <?php foreach ($bookings as $booking): ?>
@@ -193,6 +184,11 @@ try {
             </div>
         <?php endif; ?>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        AOS.init();
+    </script>
+    
 </body>
 
 </html>
