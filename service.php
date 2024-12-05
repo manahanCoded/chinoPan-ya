@@ -130,13 +130,15 @@ $services = $stmt->fetchAll(PDO::FETCH_ASSOC);
             $service_name = isset($service['service_name']) ? htmlspecialchars($service['service_name']) : 'No Name';
             $service_description = isset($service['description']) ? htmlspecialchars($service['description']) : 'No Description';
         ?>
-        <div class="service-card" data-aos="zoom-in">
-            <img src="./servicePage_SRC/<?= htmlspecialchars($image_names[$index]); ?>" alt="<?= $service_name; ?>">
-            <h3><?= $service_name; ?></h3>
-            <p><?= $service_description; ?></p>
-            <p class="price">₱<?= $service_price; ?></p>
-            <p class="duration">Duration: <?= $service_duration; ?> mins</p>
-            <a href="./booking.php?service_id=<?= htmlspecialchars($service['service_id']); ?>"><button>Book Now</button></a>
+        <div class="service-card">
+            <div data-aos='zoom-in'>
+                <img src="./servicePage_SRC/<?= htmlspecialchars($image_names[$index]); ?>" alt="<?= $service_name; ?>">
+                <h3><?= $service_name; ?></h3>
+                <p><?= $service_description; ?></p>
+                <p class="price">₱<?= $service_price; ?></p>
+                <p class="duration">Duration: <?= $service_duration; ?> mins</p>
+                <a href="./booking.php?service_id=<?= htmlspecialchars($service['service_id']); ?>"><button>Book Now</button></a>
+            </div>
         </div>
         <?php 
         $index++;
